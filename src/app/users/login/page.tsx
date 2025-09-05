@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Grid from "@mui/material/Grid2";
-import { Button, Divider, TextField, Typography } from "@mui/material";
+import { Button, Divider, TextField } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { setSnackBarData } from "@/redux/reducers/snackBarSlice";
 import { useDispatch } from "react-redux";
@@ -29,7 +29,9 @@ export default function Login(): React.ReactElement {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(loginData),
     })
-      .then((res) => res.json())
+      .then((res) => {
+        return res.json();
+      })
       .then((data) => {
         if (data?.error) {
           dispatch(
@@ -37,7 +39,7 @@ export default function Login(): React.ReactElement {
               open: true,
               severity: "error",
               message: data?.error,
-            })
+            }),
           );
         } else {
           dispatch(
@@ -45,7 +47,7 @@ export default function Login(): React.ReactElement {
               open: true,
               severity: "success",
               message: data?.message,
-            })
+            }),
           );
           router.push("/invoice");
         }
@@ -56,7 +58,7 @@ export default function Login(): React.ReactElement {
             open: true,
             severity: "error",
             message: err?.message || err?.error || "Internal Server Error",
-          })
+          }),
         );
       });
   };
@@ -66,160 +68,162 @@ export default function Login(): React.ReactElement {
   };
 
   return (
-    <Grid
-      container
-      height={"100vh"}
-      width={"100vh"}
-      justifyContent={"center"}
-      alignItems={"center"}
-    >
-      <Grid
-        container
-        width="31rem"
-        bgcolor="#2D424E"
-        border={1}
-        borderColor="#000"
-        borderRadius="0.5rem"
-        p={3}
-      >
-        <Typography variant="h4" color="whitesmoke">
-          Login
-        </Typography>
-
-        <Divider
-          variant="fullWidth"
-          color="black"
+    <>
+      <Grid container rowGap={3} width={"100%"}>
+        <TextField
+          id="email"
+          required
+          fullWidth
+          label="Email/Full Name"
+          value={loginData?.email}
+          onChange={(e) => handleOnChange("email", e.target.value)}
           sx={{
-            width: "100%",
-            my: "1.2rem",
+            "& label": {
+              color: "#B0BEC5", // Label color (soft light)
+            },
+            "& label.Mui-focused": {
+              color: "#FFFFFF", // Label color on focus
+            },
+            "& .MuiOutlinedInput-root": {
+              color: "#FFFFFF", // Input text color
+              "& fieldset": {
+                borderColor: "#78909C", // Default border
+              },
+              "&:hover fieldset": {
+                borderColor: "#FFFFFF", // On hover
+              },
+              "&.Mui-focused fieldset": {
+                borderColor: "#15AFF0", // On focus
+              },
+            },
+            "& input::placeholder": {
+              color: "#B0BEC5",
+            },
+            "& label.MuiFormLabel-root .MuiInputLabel-asterisk": {
+              color: "red",
+            },
           }}
         />
+        <TextField
+          id="password"
+          required
+          fullWidth
+          label="Password"
+          value={loginData?.password}
+          type="password"
+          onChange={(e) => handleOnChange("password", e.target.value)}
+          sx={{
+            "& label": {
+              color: "#B0BEC5", // Label color (soft light)
+            },
+            "& label.Mui-focused": {
+              color: "#FFFFFF", // Label color on focus
+            },
+            "& .MuiOutlinedInput-root": {
+              color: "#FFFFFF", // Input text color
+              "& fieldset": {
+                borderColor: "#78909C", // Default border
+              },
+              "&:hover fieldset": {
+                borderColor: "#FFFFFF", // On hover
+              },
+              "&.Mui-focused fieldset": {
+                borderColor: "#15AFF0", // On focus
+              },
+            },
+            "& input::placeholder": {
+              color: "#B0BEC5",
+            },
+            "& label.MuiFormLabel-root .MuiInputLabel-asterisk": {
+              color: "red",
+            },
+          }}
+        />
+      </Grid>
+      <Divider
+        variant="fullWidth"
+        color="black"
+        sx={{
+          width: "100%",
+          my: "1.2rem",
+        }}
+      />
 
-        <Grid container rowGap={3} width={"100%"}>
-          <TextField
-            id="email"
-            required
-            fullWidth
-            label="Email/Full Name"
-            value={loginData?.email}
-            onChange={(e) => handleOnChange("email", e.target.value)}
+      <Grid container width={"100%"} justifyContent={"center"} alignItems={"center"} spacing={2}>
+        <Grid size={4}>
+          <Button
+            variant="outlined"
             sx={{
-              "& label": {
-                color: "#B0BEC5", // Label color (soft light)
+              width: "100%",
+              backgroundColor: "#2196F3",
+              color: "#fff",
+              "&:hover": {
+                backgroundColor: "#1976D2",
               },
-              "& label.Mui-focused": {
-                color: "#FFFFFF", // Label color on focus
+              "&:focus": {
+                border: "2px solid #fff",
               },
-              "& .MuiOutlinedInput-root": {
-                color: "#FFFFFF", // Input text color
-                "& fieldset": {
-                  borderColor: "#78909C", // Default border
-                },
-                "&:hover fieldset": {
-                  borderColor: "#FFFFFF", // On hover
-                },
-                "&.Mui-focused fieldset": {
-                  borderColor: "#15AFF0", // On focus
-                },
-              },
-              "& input::placeholder": {
-                color: "#B0BEC5",
-              },
-              "& label.MuiFormLabel-root .MuiInputLabel-asterisk": {
-                color: "red",
+              "&:disabled": {
+                backgroundColor: "#90CAF9",
+                color: "#E0E0E0",
               },
             }}
-          />
-          <TextField
-            id="password"
-            required
-            fullWidth
-            label="Password"
-            value={loginData?.password}
-            type="password"
-            onChange={(e) => handleOnChange("password", e.target.value)}
-            sx={{
-              "& label": {
-                color: "#B0BEC5", // Label color (soft light)
-              },
-              "& label.Mui-focused": {
-                color: "#FFFFFF", // Label color on focus
-              },
-              "& .MuiOutlinedInput-root": {
-                color: "#FFFFFF", // Input text color
-                "& fieldset": {
-                  borderColor: "#78909C", // Default border
-                },
-                "&:hover fieldset": {
-                  borderColor: "#FFFFFF", // On hover
-                },
-                "&.Mui-focused fieldset": {
-                  borderColor: "#15AFF0", // On focus
-                },
-              },
-              "& input::placeholder": {
-                color: "#B0BEC5",
-              },
-              "& label.MuiFormLabel-root .MuiInputLabel-asterisk": {
-                color: "red",
-              },
-            }}
-          />
+            onClick={() => router.push("/users/signUp")}
+          >
+            Sign Up
+          </Button>
         </Grid>
-        <Divider
-          variant="fullWidth"
-          color="black"
-          sx={{
-            width: "100%",
-            my: "1.2rem",
-          }}
-        />
-
-        <Grid
-          container
-          width={"100%"}
-          justifyContent={"center"}
-          alignItems={"center"}
-          spacing={2}
-        >
-          <Grid size={4}>
-            <Button
-              variant="outlined"
-              sx={{ width: "100%" }}
-              onClick={() => router.push("/users/signUp")}
-            >
-              Sign Up
-            </Button>
-          </Grid>
-          <Grid size={4}>
-            <Button
-              onClick={handleReset}
-              variant="outlined"
-              sx={{
-                color: "#FEFFFE",
-                width: "100%",
-              }}
-              disabled={!(loginData?.email || loginData?.password)}
-            >
-              Clear
-            </Button>
-          </Grid>
-          <Grid size={4}>
-            <Button
-              onClick={handleSubmit}
-              variant="outlined"
-              disabled={!(loginData?.email && loginData?.password)}
-              sx={{
-                color: "#FEFFFE",
-                backgroundColor: "#15AFF0",
-                width: "100%",
-              }}
-            >
-              Login
-            </Button>
-          </Grid>
+        <Grid size={4}>
+          <Button
+            onClick={handleReset}
+            variant="outlined"
+            sx={{
+              width: "100%",
+              color: "#fff",
+              borderColor: "#fff",
+              "&:hover": {
+                backgroundColor: "#3E5766",
+                borderColor: "#fff",
+              },
+              "&:focus": {
+                backgroundColor: "#3E5766",
+                border: "2px solid #fff",
+              },
+              "&:disabled": {
+                color: "#AAAAAA",
+                borderColor: "#AAAAAA",
+              },
+            }}
+            disabled={!(loginData?.email || loginData?.password)}
+          >
+            Clear
+          </Button>
+        </Grid>
+        <Grid size={4}>
+          <Button
+            onClick={handleSubmit}
+            variant="outlined"
+            disabled={!(loginData?.email && loginData?.password)}
+            sx={{
+              width: "100%",
+              backgroundColor: "#4CAF50",
+              color: "#fff",
+              "&:hover": {
+                backgroundColor: "#45A049",
+              },
+              "&:focus": {
+                border: "2px solid #fff",
+              },
+              "&:disabled": {
+                backgroundColor: "#A5D6A7",
+                color: "#E0E0E0",
+              },
+            }}
+          >
+            Login
+          </Button>
         </Grid>
       </Grid>
-    </Grid>
+    </>
   );
 }

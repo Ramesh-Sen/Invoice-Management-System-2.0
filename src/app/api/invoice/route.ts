@@ -24,10 +24,7 @@ export async function GET(req: NextRequest) {
         .limit(limit)
         .exec();
       const count = await Invoice.countDocuments();
-      return NextResponse.json(
-        { mssg: "Success", data: data },
-        { status: 200 },
-      );
+      return NextResponse.json({ mssg: "Success", data: data }, { status: 200 });
     }
     console.log("invoice 2");
 
@@ -56,10 +53,7 @@ export async function POST(req: NextRequest) {
       owner: _id,
     });
     const savedInvoice = await newInvoice.save();
-    return NextResponse.json(
-      { message: "Success", data: savedInvoice },
-      { status: 200 },
-    );
+    return NextResponse.json({ message: "Success", data: savedInvoice }, { status: 200 });
   } catch (err: any) {
     return NextResponse.json({ message: err.message }, { status: 500 });
   }
@@ -76,10 +70,7 @@ export async function PUT(req: NextRequest) {
       new: true,
     });
     console.log(2, savedInvoice);
-    return NextResponse.json(
-      { message: "Success", data: savedInvoice },
-      { status: 200 },
-    );
+    return NextResponse.json({ message: "Success", data: savedInvoice }, { status: 200 });
   } catch (err: any) {
     return NextResponse.json({ message: err.message }, { status: 500 });
   }
@@ -94,10 +85,7 @@ export async function DELETE(req: NextRequest) {
       _id: { $in: reqBody._id },
     });
     console.log(deleteInvoice);
-    return NextResponse.json(
-      { message: "Success", data: deleteInvoice },
-      { status: 200 },
-    );
+    return NextResponse.json({ message: "Success", data: deleteInvoice }, { status: 200 });
   } catch (err: any) {
     return NextResponse.json({ message: err.message }, { status: 500 });
   }

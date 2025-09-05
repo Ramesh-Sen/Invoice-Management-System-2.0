@@ -1,6 +1,6 @@
 import { connect } from "@/dbConfig/dbconfig";
 import { NextRequest, NextResponse } from "next/server";
-import User from "../../../../models/userModel";
+import User from "@/models/userModel";
 import { cookies } from "next/headers";
 
 const db = connect();

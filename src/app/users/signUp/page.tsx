@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Grid from "@mui/material/Grid2";
-import { Button, Divider, TextField, Typography } from "@mui/material";
+import { Button, Divider, TextField } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { setSnackBarData } from "@/redux/reducers/snackBarSlice";
 import { useDispatch } from "react-redux";
@@ -49,7 +49,7 @@ export default function SignUp(): React.ReactElement {
               open: true,
               severity: "error",
               message: data?.error,
-            })
+            }),
           );
         } else {
           dispatch(
@@ -57,7 +57,7 @@ export default function SignUp(): React.ReactElement {
               open: true,
               severity: "success",
               message: data?.message,
-            })
+            }),
           );
         }
       })
@@ -67,7 +67,7 @@ export default function SignUp(): React.ReactElement {
             open: true,
             severity: "error",
             message: err?.message || err?.error || "Internal Server Error",
-          })
+          }),
         );
       });
   };
@@ -77,249 +77,251 @@ export default function SignUp(): React.ReactElement {
   };
 
   return (
-    <Grid
-      container
-      height={"100vh"}
-      width={"100vh"}
-      justifyContent={"center"}
-      alignItems={"center"}
-    >
-      <Grid
-        container
-        width="31rem"
-        bgcolor="#2D424E"
-        border={1}
-        borderColor="#000"
-        borderRadius="0.5rem"
-        p={3}
-      >
-        <Typography variant="h4" color="whitesmoke">
-          Sign Up
-        </Typography>
-
-        <Divider
-          variant="fullWidth"
-          color="black"
+    <>
+      <Grid container rowGap={3} width={"100%"}>
+        <TextField
+          id="email"
+          required
+          fullWidth
+          value={signUpData.email}
+          variant="outlined"
+          label="Email"
+          onChange={(e) => handleOnChange("email", e.target.value)}
           sx={{
-            width: "100%",
-            my: "1.2rem",
+            "& label": {
+              color: "#B0BEC5", // Label color (soft light)
+            },
+            "& label.Mui-focused": {
+              color: "#FFFFFF", // Label color on focus
+            },
+            "& .MuiOutlinedInput-root": {
+              color: "#FFFFFF", // Input text color
+              "& fieldset": {
+                borderColor: "#78909C", // Default border
+              },
+              "&:hover fieldset": {
+                borderColor: "#FFFFFF", // On hover
+              },
+              "&.Mui-focused fieldset": {
+                borderColor: "#15AFF0", // On focus
+              },
+            },
+            "& input::placeholder": {
+              color: "#B0BEC5",
+            },
+            "& label.MuiFormLabel-root .MuiInputLabel-asterisk": {
+              color: "red",
+            },
           }}
         />
 
-        <Grid container rowGap={3} width={"100%"}>
-          <TextField
-            id="email"
-            required
-            fullWidth
-            value={signUpData.email}
-            variant="outlined"
-            label="Email"
-            onChange={(e) => handleOnChange("email", e.target.value)}
-            sx={{
-              "& label": {
-                color: "#B0BEC5", // Label color (soft light)
+        <TextField
+          id="name"
+          value={signUpData.name}
+          variant="outlined"
+          required
+          fullWidth
+          label="Name"
+          onChange={(e) => handleOnChange("name", e.target.value)}
+          sx={{
+            "& label": {
+              color: "#B0BEC5", // Label color (soft light)
+            },
+            "& label.Mui-focused": {
+              color: "#FFFFFF", // Label color on focus
+            },
+            "& .MuiOutlinedInput-root": {
+              color: "#FFFFFF", // Input text color
+              "& fieldset": {
+                borderColor: "#78909C", // Default border
               },
-              "& label.Mui-focused": {
-                color: "#FFFFFF", // Label color on focus
+              "&:hover fieldset": {
+                borderColor: "#FFFFFF", // On hover
               },
-              "& .MuiOutlinedInput-root": {
-                color: "#FFFFFF", // Input text color
-                "& fieldset": {
-                  borderColor: "#78909C", // Default border
-                },
-                "&:hover fieldset": {
-                  borderColor: "#FFFFFF", // On hover
-                },
-                "&.Mui-focused fieldset": {
-                  borderColor: "#15AFF0", // On focus
-                },
+              "&.Mui-focused fieldset": {
+                borderColor: "#15AFF0", // On focus
               },
-              "& input::placeholder": {
-                color: "#B0BEC5",
-              },
-              "& label.MuiFormLabel-root .MuiInputLabel-asterisk": {
-                color: "red",
-              },
-            }}
-          />
+            },
+            "& input::placeholder": {
+              color: "#B0BEC5",
+            },
+            "& label.MuiFormLabel-root .MuiInputLabel-asterisk": {
+              color: "red",
+            },
+          }}
+        />
 
-          <TextField
-            id="name"
-            value={signUpData.name}
-            variant="outlined"
-            required
-            fullWidth
-            label="Name"
-            onChange={(e) => handleOnChange("name", e.target.value)}
-            sx={{
-              "& label": {
-                color: "#B0BEC5", // Label color (soft light)
+        <TextField
+          id="password"
+          value={signUpData.password}
+          required
+          fullWidth
+          variant="outlined"
+          label="Password"
+          onChange={(e) => handleOnChange("password", e.target.value)}
+          sx={{
+            "& label": {
+              color: "#B0BEC5", // Label color (soft light)
+            },
+            "& label.Mui-focused": {
+              color: "#FFFFFF", // Label color on focus
+            },
+            "& .MuiOutlinedInput-root": {
+              color: "#FFFFFF", // Input text color
+              "& fieldset": {
+                borderColor: "#78909C", // Default border
               },
-              "& label.Mui-focused": {
-                color: "#FFFFFF", // Label color on focus
+              "&:hover fieldset": {
+                borderColor: "#FFFFFF", // On hover
               },
-              "& .MuiOutlinedInput-root": {
-                color: "#FFFFFF", // Input text color
-                "& fieldset": {
-                  borderColor: "#78909C", // Default border
-                },
-                "&:hover fieldset": {
-                  borderColor: "#FFFFFF", // On hover
-                },
-                "&.Mui-focused fieldset": {
-                  borderColor: "#15AFF0", // On focus
-                },
+              "&.Mui-focused fieldset": {
+                borderColor: "#15AFF0", // On focus
               },
-              "& input::placeholder": {
-                color: "#B0BEC5",
-              },
-              "& label.MuiFormLabel-root .MuiInputLabel-asterisk": {
-                color: "red",
-              },
-            }}
-          />
+            },
+            "& input::placeholder": {
+              color: "#B0BEC5",
+            },
+            "& label.MuiFormLabel-root .MuiInputLabel-asterisk": {
+              color: "red",
+            },
+          }}
+        />
 
-          <TextField
-            id="password"
-            value={signUpData.password}
-            required
-            fullWidth
-            variant="outlined"
-            label="Password"
-            onChange={(e) => handleOnChange("password", e.target.value)}
-            sx={{
-              "& label": {
-                color: "#B0BEC5", // Label color (soft light)
+        <TextField
+          id="confirmPassword"
+          value={signUpData.confirmPassword}
+          required
+          fullWidth
+          variant="outlined"
+          label="Confirm Password"
+          onChange={(e) => handleOnChange("confirmPassword", e.target.value)}
+          sx={{
+            "& label": {
+              color: "#B0BEC5", // Label color (soft light)
+            },
+            "& label.Mui-focused": {
+              color: "#FFFFFF", // Label color on focus
+            },
+            "& .MuiOutlinedInput-root": {
+              color: "#FFFFFF", // Input text color
+              "& fieldset": {
+                borderColor: "#78909C", // Default border
               },
-              "& label.Mui-focused": {
-                color: "#FFFFFF", // Label color on focus
+              "&:hover fieldset": {
+                borderColor: "#FFFFFF", // On hover
               },
-              "& .MuiOutlinedInput-root": {
-                color: "#FFFFFF", // Input text color
-                "& fieldset": {
-                  borderColor: "#78909C", // Default border
-                },
-                "&:hover fieldset": {
-                  borderColor: "#FFFFFF", // On hover
-                },
-                "&.Mui-focused fieldset": {
-                  borderColor: "#15AFF0", // On focus
-                },
+              "&.Mui-focused fieldset": {
+                borderColor: "#15AFF0", // On focus
               },
-              "& input::placeholder": {
-                color: "#B0BEC5",
-              },
-              "& label.MuiFormLabel-root .MuiInputLabel-asterisk": {
-                color: "red",
-              },
-            }}
-          />
+            },
+            "& input::placeholder": {
+              color: "#B0BEC5",
+            },
+            "& label.MuiFormLabel-root .MuiInputLabel-asterisk": {
+              color: "red",
+            },
+          }}
+        />
+      </Grid>
 
-          <TextField
-            id="confirmPassword"
-            value={signUpData.confirmPassword}
-            required
-            fullWidth
+      <Divider
+        variant="fullWidth"
+        color="black"
+        sx={{
+          width: "100%",
+          my: "1.2rem",
+        }}
+      />
+
+      <Grid container width={"100%"} justifyContent={"center"} alignItems={"center"} spacing={2}>
+        <Grid size={4}>
+          <Button
             variant="outlined"
-            label="Confirm Password"
-            onChange={(e) => handleOnChange("confirmPassword", e.target.value)}
             sx={{
-              "& label": {
-                color: "#B0BEC5", // Label color (soft light)
+              width: "100%",
+              backgroundColor: "#2196F3",
+              color: "#fff",
+              "&:hover": {
+                backgroundColor: "#1976D2",
               },
-              "& label.Mui-focused": {
-                color: "#FFFFFF", // Label color on focus
+              "&:focus": {
+                border: "2px solid #fff",
               },
-              "& .MuiOutlinedInput-root": {
-                color: "#FFFFFF", // Input text color
-                "& fieldset": {
-                  borderColor: "#78909C", // Default border
-                },
-                "&:hover fieldset": {
-                  borderColor: "#FFFFFF", // On hover
-                },
-                "&.Mui-focused fieldset": {
-                  borderColor: "#15AFF0", // On focus
-                },
-              },
-              "& input::placeholder": {
-                color: "#B0BEC5",
-              },
-              "& label.MuiFormLabel-root .MuiInputLabel-asterisk": {
-                color: "red",
+              "&:disabled": {
+                backgroundColor: "#90CAF9",
+                color: "#E0E0E0",
               },
             }}
-          />
+            onClick={() => router.push("/users/login")}
+          >
+            Login
+          </Button>
         </Grid>
-
-        <Divider
-          variant="fullWidth"
-          color="black"
-          sx={{
-            width: "100%",
-            my: "1.2rem",
-          }}
-        />
-
-        <Grid
-          container
-          width={"100%"}
-          justifyContent={"center"}
-          alignItems={"center"}
-          spacing={2}
-        >
-          <Grid size={4}>
-            <Button
-              variant="outlined"
-              sx={{ width: "100%" }}
-              onClick={() => router.push("/users/login")}
-            >
-              Login
-            </Button>
-          </Grid>
-          <Grid size={4}>
-            <Button
-              onClick={handleReset}
-              variant="outlined"
-              disabled={
-                !(
-                  signUpData?.name ||
-                  signUpData?.email ||
-                  signUpData?.password ||
-                  signUpData?.confirmPassword
-                )
-              }
-              sx={{
-                color: "#FEFFFE",
-                width: "100%",
-              }}
-            >
-              Clear
-            </Button>
-          </Grid>
-          <Grid size={4}>
-            <Button
-              onClick={handleSubmit}
-              variant="outlined"
-              disabled={
-                !(
-                  signUpData?.name &&
-                  signUpData?.email &&
-                  signUpData?.password &&
-                  signUpData?.confirmPassword
-                )
-              }
-              sx={{
-                width: "100%",
-                color: "#FEFFFE",
-                backgroundColor: "#15AFF0",
-              }}
-            >
-              Sign Up
-            </Button>
-          </Grid>
+        <Grid size={4}>
+          <Button
+            onClick={handleReset}
+            variant="outlined"
+            disabled={
+              !(
+                signUpData?.name ||
+                signUpData?.email ||
+                signUpData?.password ||
+                signUpData?.confirmPassword
+              )
+            }
+            sx={{
+              width: "100%",
+              color: "#fff",
+              borderColor: "#fff",
+              "&:hover": {
+                backgroundColor: "#3E5766",
+                borderColor: "#fff",
+              },
+              "&:focus": {
+                backgroundColor: "#3E5766",
+                border: "2px solid #fff",
+              },
+              "&:disabled": {
+                color: "#AAAAAA",
+                borderColor: "#AAAAAA",
+              },
+            }}
+          >
+            Clear
+          </Button>
+        </Grid>
+        <Grid size={4}>
+          <Button
+            onClick={handleSubmit}
+            variant="outlined"
+            disabled={
+              !(
+                signUpData?.name &&
+                signUpData?.email &&
+                signUpData?.password &&
+                signUpData?.confirmPassword
+              )
+            }
+            sx={{
+              width: "100%",
+              backgroundColor: "#4CAF50",
+              color: "#fff",
+              "&:hover": {
+                backgroundColor: "#45A049",
+              },
+              "&:focus": {
+                border: "2px solid #fff",
+              },
+              "&:disabled": {
+                backgroundColor: "#A5D6A7",
+                color: "#E0E0E0",
+              },
+            }}
+          >
+            Sign Up
+          </Button>
         </Grid>
       </Grid>
-    </Grid>
+    </>
   );
 }

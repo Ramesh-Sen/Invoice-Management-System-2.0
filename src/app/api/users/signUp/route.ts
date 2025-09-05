@@ -1,6 +1,6 @@
 import { connect } from "@/dbConfig/dbconfig";
 import { NextRequest, NextResponse } from "next/server";
-import User from "../../../../models/userModel";
+import User from "@/models/userModel";
 
 const db = connect();
 
@@ -11,10 +11,7 @@ export async function POST(req: NextRequest) {
 
     const existedUser = await User.findOne({ email: reqBody.email });
     if (existedUser) {
-      return NextResponse.json(
-        { error: "User already exists" },
-        { status: 409 },
-      );
+      return NextResponse.json({ error: "User already exists" }, { status: 409 });
     }
 
     const newUser = await User.create({ ...reqBody });
@@ -26,10 +23,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    return NextResponse.json(
-      { message: "User registered Successfully" },
-      { status: 201 },
-    );
+    return NextResponse.json({ message: "User registered Successfully" }, { status: 201 });
   } catch (err: any) {
     return NextResponse.json({ error: err.message }, { status: 500 });
   }

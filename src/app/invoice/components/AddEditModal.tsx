@@ -1,35 +1,20 @@
 "use client";
 
-import {
-  Backdrop,
-  Box,
-  Button,
-  Fade,
-  InputLabel,
-  Modal,
-  TextField,
-} from "@mui/material";
-import React, { useEffect, useState, useRef } from "react";
-import type { RootState } from "../../../redux/store";
+import { Backdrop, Box, Button, Fade, InputLabel, Modal, TextField } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import type { RootState } from "@/redux/store";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  openAddEditModal,
-  setModalValue,
-} from "../../../redux/reducers/modalSlice";
+import { openAddEditModal, setModalValue } from "@/redux/reducers/modalSlice";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 
-export default function AddEditModal() {
+export default function AddEditModal(): React.ReactElement {
   const dispatch = useDispatch();
-  const modalValue = useSelector(
-    (state: RootState) => state.modalStore.modalValue,
-  );
-  const addEditModal = useSelector(
-    (state: RootState) => state.modalStore.addEditModal,
-  );
+  const modalValue = useSelector((state: RootState) => state.modalStore.modalValue);
+  const addEditModal = useSelector((state: RootState) => state.modalStore.addEditModal);
   const idArr = useSelector((state: RootState) => state.idArrStore.idArr);
 
   // const addEditFormData = {
@@ -84,42 +69,40 @@ export default function AddEditModal() {
           : {
               customerName: document.getElementById(`customerName-${idArr[0]}`)
                 ?.innerText as string,
-              customerNo: document.getElementById(`customerNo-${idArr[0]}`)
-                ?.innerText as string,
-              invoiceNo: document.getElementById(`invoiceNo-${idArr[0]}`)
-                ?.innerText as string,
+              customerNo: document.getElementById(`customerNo-${idArr[0]}`)?.innerText as string,
+              invoiceNo: document.getElementById(`invoiceNo-${idArr[0]}`)?.innerText as string,
               invoiceAmount: document
                 .getElementById(`invoiceAmount-${idArr[0]}`)
                 ?.innerText.slice(0, -1) as string,
-              dueDate: document.getElementById(`dueDate-${idArr[0]}`)
-                ?.innerText as string,
-              notes: document.getElementById(`notes-${idArr[0]}`)
-                ?.innerText as string,
+              dueDate: document.getElementById(`dueDate-${idArr[0]}`)?.innerText as string,
+              notes: document.getElementById(`notes-${idArr[0]}`)?.innerText as string,
             },
       ),
     [idArr, modalValue],
   );
 
-  const handleClose = () => dispatch(openAddEditModal(false));
+  const handleClose = (): void => {
+    dispatch(openAddEditModal(false));
+  };
 
-  const onChangeHandler = (id: string, value: string) => {
+  const onChangeHandler = (id: string, value: string): void => {
     if (id === "customerName") {
-      let customerName = value;
+      const customerName = value;
       setAddEditFormData({ ...addEditFormData, customerName });
     } else if (id === "customerNo") {
-      let customerNo = value;
+      const customerNo = value;
       setAddEditFormData({ ...addEditFormData, customerNo });
     } else if (id === "invoiceNo") {
-      let invoiceNo = value;
+      const invoiceNo = value;
       setAddEditFormData({ ...addEditFormData, invoiceNo });
     } else if (id === "invoiceAmount") {
-      let invoiceAmount = value;
+      const invoiceAmount = value;
       setAddEditFormData({ ...addEditFormData, invoiceAmount });
     } else if (id === "") {
-      let dueDate = dayjs(value).format("YYYY-MM-DD");
+      const dueDate = dayjs(value).format("YYYY-MM-DD");
       setAddEditFormData({ ...addEditFormData, dueDate });
     } else if (id === "notes") {
-      let notes = value;
+      const notes = value;
       setAddEditFormData({ ...addEditFormData, notes });
     }
   };
@@ -131,9 +114,7 @@ export default function AddEditModal() {
       method: modalValue === "add" ? "POST" : "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(
-        modalValue === "add"
-          ? addEditFormData
-          : { ...addEditFormData, _id: idArr[0] as string },
+        modalValue === "add" ? addEditFormData : { ...addEditFormData, _id: idArr[0] as string },
       ),
     })
       .then((res) => res.json())
@@ -183,7 +164,7 @@ export default function AddEditModal() {
       <Fade in={addEditModal}>
         <Box
           sx={{
-            position: "absolute" as "absolute",
+            position: "absolute",
             top: "50%",
             left: "50%",
             transform: "translate(-50%, -50%)",

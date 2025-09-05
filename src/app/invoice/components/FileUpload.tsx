@@ -1,31 +1,23 @@
 "use client";
-import {
-  Backdrop,
-  Box,
-  Button,
-  Fade,
-  InputLabel,
-  Modal,
-  TextField,
-} from "@mui/material";
+import { Backdrop, Box, Button, Fade, InputLabel, Modal, TextField } from "@mui/material";
 import Grid from "@mui/material/Grid2";
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 import type { RootState } from "@/redux/store";
 import { useSelector, useDispatch } from "react-redux";
 import { openUploadModal } from "@/redux/reducers/modalSlice";
-import { refreshInvoiceDatas } from "@/redux/reducers/invoiceDataSlice";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
-import CustomTextField from "@/util/CustomTextField";
 
-export default function FileUpload() {
+export default function FileUpload(): React.ReactElement {
   const file = useRef<HTMLInputElement>(null);
   const dispatch = useDispatch();
-  const uploadModal = useSelector(
-    (state: RootState) => state.modalStore.uploadModal,
-  );
-  const handleClose = () => dispatch(openUploadModal(false));
+  const uploadModal = useSelector((state: RootState) => state.modalStore.uploadModal);
+  const handleClose = (): void => {
+    dispatch(openUploadModal(false));
+  };
 
-  const onChangeHandler = (id: string, value: string) => {};
+  const onChangeHandler = (id: string, value: string): void => {
+    console.log(id, value);
+  };
 
   const handleSubmit = (): void => {
     console.log("upload");
@@ -65,7 +57,7 @@ export default function FileUpload() {
       <Fade in={uploadModal}>
         <Box
           sx={{
-            position: "absolute" as "absolute",
+            position: "absolute",
             top: "50%",
             left: "50%",
             transform: "translate(-50%, -50%)",
@@ -144,11 +136,7 @@ export default function FileUpload() {
           </Grid>
 
           <hr className="border-t-[1px] border-t-black" />
-          <Grid
-            container
-            columnSpacing={{ xs: 1, sm: 2, md: 3 }}
-            sx={{ padding: "20px" }}
-          >
+          <Grid container columnSpacing={{ xs: 1, sm: 2, md: 3 }} sx={{ padding: "20px" }}>
             <Grid size={4}>
               <Button
                 variant="outlined"

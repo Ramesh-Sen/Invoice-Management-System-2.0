@@ -9,9 +9,7 @@ export async function connect(): Promise<typeof mongoose | void> {
     console.log("MongoDB Connected Successfully");
     return db;
   } catch (err) {
-    console.log(
-      "MongoDB Connection Error. Please make sure MongoDB is running. " + err,
-    );
+    console.log("MongoDB Connection Error. Please make sure MongoDB is running. " + err);
     console.log(err);
   }
 }

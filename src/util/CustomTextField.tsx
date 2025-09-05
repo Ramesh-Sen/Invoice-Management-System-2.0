@@ -1,18 +1,8 @@
-import React, { forwardRef, InputHTMLAttributes } from "react";
+import React, { forwardRef } from "react";
 import TextField, { TextFieldProps } from "@mui/material/TextField";
 
 const CustomTextField = forwardRef<HTMLInputElement, TextFieldProps>(
-  (
-    {
-      id = "",
-      label = "",
-      type = "text",
-      error = false,
-      helperText = "",
-      ...props
-    },
-    ref,
-  ) => {
+  ({ id = "", label = "", type = "text", error = false, helperText = "", ...props }, ref) => {
     return (
       <TextField
         id={id}

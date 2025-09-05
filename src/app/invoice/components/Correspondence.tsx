@@ -13,34 +13,19 @@ import {
   TableRow,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { store, type RootState } from "../../../redux/store";
+import { RootState } from "@/redux/store";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  openAddEditModal,
-  openCorrespondenceModal,
-  setModalValue,
-} from "../../../redux/reducers/modalSlice";
+import { openCorrespondenceModal } from "@/redux/reducers/modalSlice";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
+import { InvoiceData } from "@/util/types";
 
-export default function Correspondence() {
+export default function Correspondence(): React.ReactElement {
   const dispatch = useDispatch();
-  const modalValue = useSelector(
-    (state: RootState) => state.modalStore.modalValue,
-  );
+  const modalValue = useSelector((state: RootState) => state.modalStore.modalValue);
   const correspondenceModal = useSelector(
     (state: RootState) => state.modalStore.correspondenceModal,
   );
   const idArr = useSelector((state: RootState) => state.idArrStore.idArr);
-  interface InvoiceData {
-    _id: string;
-    customerName: string;
-    customerNo: string;
-    invoiceNo: string;
-    invoiceAmount: string;
-    dueDate: string;
-    notes: string;
-    invoiceDate?: string;
-  }
 
   const invoiceDatas = useSelector(
     (state: RootState) => state.invoiceDataStore.invoiceDatas as InvoiceData[],
@@ -58,15 +43,15 @@ export default function Correspondence() {
   });
 
   useEffect(() => {
-    const selectedData = invoiceDatas?.find(
-      (invoice) => invoice._id === idArr[0],
-    );
+    const selectedData = invoiceDatas?.find((invoice) => invoice._id === idArr[0]);
     if (selectedData) {
       setSelectedInvoice(selectedData);
     }
   }, [idArr, invoiceDatas, modalValue]);
 
-  const handleClose = () => dispatch(openCorrespondenceModal(false));
+  const handleClose = (): void => {
+    dispatch(openCorrespondenceModal(false));
+  };
 
   // const handleSubmit = (): void => {
   //   console.log("add");
@@ -116,7 +101,7 @@ export default function Correspondence() {
         <Fade in={correspondenceModal}>
           <Box
             sx={{
-              position: "absolute" as "absolute",
+              position: "absolute",
               top: "50%",
               left: "50%",
               transform: "translate(-50%, -50%)",
@@ -129,9 +114,7 @@ export default function Correspondence() {
               p: 0,
             }}
           >
-            <span className=" m-5 text-2xl text-[#FEFFFE] relative top-4">
-              View Correspondence
-            </span>
+            <span className=" m-5 text-2xl text-[#FEFFFE] relative top-4">View Correspondence</span>
             <CloseRoundedIcon
               onClick={handleClose}
               sx={{
@@ -147,11 +130,10 @@ export default function Correspondence() {
               Dear Sir/Madam,
               <br /> Greetings! <br />
               <br />
-              This is to remind you that there are one or more open invoices on
-              your account. lease provide at your earliest convenience an update
-              on the payment details or clarify the reason for the delay. If you
-              have any specific issue with the invoice(s), please let us know so
-              that we can address it to the correct Department.
+              This is to remind you that there are one or more open invoices on your account. lease
+              provide at your earliest convenience an update on the payment details or clarify the
+              reason for the delay. If you have any specific issue with the invoice(s), please let
+              us know so that we can address it to the correct Department.
               <br />
               <br /> Please find the details of the invoices below:
               <br />
@@ -275,10 +257,10 @@ export default function Correspondence() {
               <br />
               <br />
               Total Amount to be Paid: $124.00K <br />
-              In case you have already made a payment for the above items,
-              please send us the details to ensure the payment is posted. <br />
-              Let us know if we can be of any further assistance. Looking
-              forward to hearing from you.
+              In case you have already made a payment for the above items, please send us the
+              details to ensure the payment is posted. <br />
+              Let us know if we can be of any further assistance. Looking forward to hearing from
+              you.
               <br />
               <br />
               Kind Regards,

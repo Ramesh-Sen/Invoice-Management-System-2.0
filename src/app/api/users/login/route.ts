@@ -1,6 +1,6 @@
 import { connect } from "@/dbConfig/dbconfig";
 import { NextRequest, NextResponse } from "next/server";
-import User from "../../../../models/userModel";
+import User from "@/models/userModel";
 import { cookies } from "next/headers";
 
 const db = connect();
@@ -18,18 +18,12 @@ export async function POST(req: NextRequest) {
     const isPasswordValid = await user.isPasswordCorrect(reqBody.password);
 
     if (!isPasswordValid) {
-      return NextResponse.json(
-        { error: "Invalid user credentials" },
-        { status: 401 },
-      );
+      return NextResponse.json({ error: "Invalid user credentials" }, { status: 401 });
     }
 
-    const { accessToken, refreshToken } =
-      await user.generateAccessAndRefereshTokens();
+    const { accessToken, refreshToken } = await user.generateAccessAndRefereshTokens();
 
-    const loggedInUser = await User.findById(user._id).select(
-      "-password -refreshToken",
-    );
+    const loggedInUser = await User.findById(user._id).select("-password -refreshToken");
 
     if (!loggedInUser) {
       return NextResponse.json(
@@ -52,10 +46,7 @@ export async function POST(req: NextRequest) {
       secure: true,
     });
 
-    return NextResponse.json(
-      { message: "User Logged In", data: loggedInUser },
-      { status: 200 },
-    );
+    return NextResponse.json({ message: "User Logged In", data: loggedInUser }, { status: 200 });
   } catch (err: any) {
     return NextResponse.json({ error: err.message }, { status: 500 });
   }

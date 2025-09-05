@@ -1,21 +1,19 @@
 "use client";
 
 import React from "react";
-import { RootState } from "../redux/store";
+import { RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { setSnackBarData } from "@/redux/reducers/snackBarSlice";
 import { Alert, Snackbar, SnackbarCloseReason } from "@mui/material";
 
 export default function SnackBar(): React.ReactElement {
-  const snackBarData = useSelector(
-    (state: RootState) => state.snackBarStore.snackBarData
-  );
+  const snackBarData = useSelector((state: RootState) => state.snackBarStore.snackBarData);
 
   const dispatch = useDispatch();
 
   const handleClose = (
     _event?: React.SyntheticEvent | Event,
-    reason?: SnackbarCloseReason
+    reason?: SnackbarCloseReason,
   ): void => {
     if (reason === "clickaway") {
       return;

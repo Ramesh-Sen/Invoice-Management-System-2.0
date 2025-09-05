@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import ReduxProvider from "../redux/ReduxProvider";
+import ReduxProvider from "@/redux/ReduxProvider";
 import "./globals.css";
+import SnackBar from "@/util/SnackBar";
+import Grid from "@mui/material/Grid2";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,7 +20,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <ReduxProvider>{children}</ReduxProvider>
+        <ReduxProvider>
+          <Grid container height={"100vh"} width={"100vw"}>
+            {children}
+          </Grid>
+          <SnackBar />
+        </ReduxProvider>
       </body>
     </html>
   );

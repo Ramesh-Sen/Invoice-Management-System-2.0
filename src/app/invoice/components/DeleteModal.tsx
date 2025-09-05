@@ -2,21 +2,21 @@
 
 import { Backdrop, Box, Button, Fade, Modal } from "@mui/material";
 import React from "react";
-import type { RootState } from "../../../redux/store";
+import type { RootState } from "@/redux/store";
 import { useSelector, useDispatch } from "react-redux";
-import { openDeleteModal } from "../../../redux/reducers/modalSlice";
+import { openDeleteModal } from "@/redux/reducers/modalSlice";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 
-export default function DeleteModal() {
+export default function DeleteModal(): React.ReactElement {
   const dispatch = useDispatch();
-  const deleteModal = useSelector(
-    (state: RootState) => state.modalStore.deleteModal,
-  );
+  const deleteModal = useSelector((state: RootState) => state.modalStore.deleteModal);
   const idArr = useSelector((state: RootState) => state.idArrStore.idArr);
 
-  const handleClose = () => dispatch(openDeleteModal(false));
+  const handleClose = (): void => {
+    dispatch(openDeleteModal(false));
+  };
 
-  const handleSubmit = () => {
+  const handleSubmit = (): void => {
     console.log("Delete File");
     console.log(idArr);
     // for (let i = 0; i < idArr.length; i++) {
@@ -55,7 +55,7 @@ export default function DeleteModal() {
         <Fade in={deleteModal}>
           <Box
             sx={{
-              position: "absolute" as "absolute",
+              position: "absolute",
               top: "50%",
               left: "50%",
               transform: "translate(-50%, -50%)",
@@ -68,9 +68,7 @@ export default function DeleteModal() {
               p: 0,
             }}
           >
-            <span className=" m-5 text-2xl text-[#FEFFFE] relative top-4">
-              Delete Invoice(s)?
-            </span>
+            <span className=" m-5 text-2xl text-[#FEFFFE] relative top-4">Delete Invoice(s)?</span>
             <CloseRoundedIcon
               onClick={handleClose}
               sx={{
@@ -83,12 +81,14 @@ export default function DeleteModal() {
             <hr className="border-t-[1px] border-t-black mt-8" />
 
             <div className="m-5">
-              You&apos;ll lose your record(s) after this action. We can&apos;t
-              recover them once you delete.
+              You&apos;ll lose your record(s) after this action. We can&apos;t recover them once you
+              delete.
               <br />
               <br />
-              Are you sure you want to{" "}
-              <span className=" text-[#FE5E5F]">permanently delete</span> them?
+              Are you sure you want to <span className=" text-[#FE5E5F]">
+                permanently delete
+              </span>{" "}
+              them?
             </div>
             <hr className="border-t-[1px] border-t-black  mb-8" />
             <Button

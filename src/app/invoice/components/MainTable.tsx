@@ -2,9 +2,11 @@
 
 import {
   Checkbox,
+  Grid2,
   Table,
   TableBody,
   TableCell,
+  TableContainer,
   TableHead,
   TableRow,
 } from "@mui/material";
@@ -14,26 +16,17 @@ import { setIdArr } from "@/redux/reducers/idArrSlice";
 import type { RootState } from "@/redux/store";
 import { setInvoiceDatas } from "@/redux/reducers/invoiceDataSlice";
 import Pagination from "@mui/material/Pagination";
+import { InvoiceData } from "@/util/types";
 
-export default function MainTable({ result }: any) {
-  const invoiceDatas = useSelector(
-    (state: RootState) => state.invoiceDataStore.invoiceDatas,
-  );
-  const modalValue = useSelector(
-    (state: RootState) => state.modalStore.modalValue,
-  );
-  const addEditModal = useSelector(
-    (state: RootState) => state.modalStore.addEditModal,
-  );
-  const deleteModal = useSelector(
-    (state: RootState) => state.modalStore.deleteModal,
-  );
+export default function MainTable(): React.ReactElement {
+  const invoiceDatas = useSelector((state: RootState) => state.invoiceDataStore.invoiceDatas);
+  const modalValue = useSelector((state: RootState) => state.modalStore.modalValue);
+  const addEditModal = useSelector((state: RootState) => state.modalStore.addEditModal);
+  const deleteModal = useSelector((state: RootState) => state.modalStore.deleteModal);
   const correspondenceModal = useSelector(
     (state: RootState) => state.modalStore.correspondenceModal,
   );
-  const uploadModal = useSelector(
-    (state: RootState) => state.modalStore.uploadModal,
-  );
+  const uploadModal = useSelector((state: RootState) => state.modalStore.uploadModal);
   const idArr = useSelector((state: RootState) => state.idArrStore.idArr);
   const dispatch = useDispatch();
 
@@ -43,8 +36,8 @@ export default function MainTable({ result }: any) {
     if (allChecked) {
       dispatch(setIdArr([]));
     } else {
-      let arr = document.getElementsByClassName("PrivateSwitchBase-input");
-      let tempArr = [];
+      const arr = document.getElementsByClassName("PrivateSwitchBase-input");
+      const tempArr = [];
 
       for (let i = 1; i < arr.length; i++) {
         tempArr.push(arr[i].id);
@@ -56,8 +49,8 @@ export default function MainTable({ result }: any) {
   };
 
   const isAllChecked = (): Array<string> => {
-    let arr = document.getElementsByClassName("PrivateSwitchBase-input");
-    let tempArr = [];
+    const arr = document.getElementsByClassName("PrivateSwitchBase-input");
+    const tempArr = [];
 
     for (let i = 1; i < arr.length; i++) {
       if ((arr[i] as HTMLInputElement).checked) {
@@ -110,226 +103,134 @@ export default function MainTable({ result }: any) {
       .catch((err) => {
         console.log(err);
       });
-  }, [
-    dispatch,
-    addEditModal,
-    deleteModal,
-    modalValue,
-    correspondenceModal,
-    uploadModal,
-    page,
-  ]);
+  }, [dispatch, addEditModal, deleteModal, modalValue, correspondenceModal, uploadModal, page]);
 
-  const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
+  const handleChange = (event: React.ChangeEvent<unknown>, value: number): void => {
     setPage(value);
   };
 
   return (
-    <>
-      <Table sx={{ minWidth: 650, height: "80vh" }} aria-label="simple table">
-        <TableHead>
-          <TableRow className=" h-[20px]">
-            <TableCell sx={{ padding: "0px 0px 0px 16px", border: "0px" }}>
-              <Checkbox
-                sx={{ color: "whitesmoke", border: "0px" }}
-                onClick={toCheckeAll}
-                checked={idArr.length === 10 ? true : false}
-              />
-            </TableCell>
-            <TableCell
-              sx={{
-                padding: "0px 0px 0px 16px",
-                color: "whitesmoke",
-                border: "0px",
-              }}
-            >
-              Customer Name
-            </TableCell>
-            <TableCell
-              sx={{
-                padding: "0px 0px 0px 16px",
-                color: "whitesmoke",
-                border: "0px",
-              }}
-            >
-              Customer No.
-            </TableCell>
-            <TableCell
-              sx={{
-                padding: "0px 0px 0px 16px",
-                color: "whitesmoke",
-                border: "0px",
-              }}
-            >
-              Invoice No.
-            </TableCell>
-            <TableCell
-              sx={{
-                padding: "0px 0px 0px 16px",
-                color: "whitesmoke",
-                border: "0px",
-              }}
-              align="right"
-            >
-              Invoice Amount
-            </TableCell>
-            <TableCell
-              sx={{
-                padding: "0px 0px 0px 16px",
-                color: "whitesmoke",
-                border: "0px",
-              }}
-              align="right"
-            >
-              Due Date
-            </TableCell>
-            <TableCell
-              sx={{
-                padding: "0px 0px 0px 16px",
-                color: "whitesmoke",
-                border: "0px",
-              }}
-            >
-              Predicted Payment Date
-            </TableCell>
-            <TableCell
-              sx={{
-                padding: "0px 0px 0px 16px",
-                color: "whitesmoke",
-                border: "0px",
-              }}
-            >
-              Predicted Aging Bucket
-            </TableCell>
-            <TableCell
-              sx={{
-                padding: "0px 0px 0px 16px",
-                color: "whitesmoke",
-                border: "0px",
-              }}
-            >
-              Notes
-            </TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {invoiceDatas &&
-            invoiceDatas.map((invoiceData: any) => (
-              <TableRow
-                // className=" h-[20px]"
-                key={invoiceData._id}
-                sx={{
-                  height: "20px",
-                  "&nth-of-type(even)": { backgroundColor: "#000000" },
-                }}
-              >
-                <TableCell
-                  sx={{ padding: "0px 0px 0px 16px", border: "0px" }}
-                  scope="row"
-                >
-                  <Checkbox
-                    checked={idArr.includes(invoiceData._id) ? true : false}
-                    // checked={allCheck}
-                    id={invoiceData._id}
-                    className="rowCheckBox"
-                    onClick={isAllChecked}
-                    sx={{ color: "whitesmoke", border: "0px" }}
-                  />
-                </TableCell>
-                <TableCell
-                  id={`customerName-${invoiceData._id}`}
-                  sx={{
-                    padding: "0px 0px 0px 16px",
-                    color: "whitesmoke",
-                    border: "0px",
-                  }}
-                >
-                  {invoiceData.customerName}
-                </TableCell>
-                <TableCell
-                  id={`customerNo-${invoiceData._id}`}
-                  sx={{
-                    padding: "0px 0px 0px 16px",
-                    color: "whitesmoke",
-                    border: "0px",
-                  }}
-                >
-                  {invoiceData.customerNo}
-                </TableCell>
-                <TableCell
-                  id={`invoiceNo-${invoiceData._id}`}
-                  sx={{
-                    padding: "0px 0px 0px 16px",
-                    color: "whitesmoke",
-                    border: "0px",
-                  }}
-                >
-                  {invoiceData.invoiceNo}
-                </TableCell>
-                <TableCell
-                  id={`invoiceAmount-${invoiceData._id}`}
-                  sx={{
-                    padding: "0px 0px 0px 16px",
-                    color: "whitesmoke",
-                    border: "0px",
-                  }}
-                  align="right"
-                >
-                  {invoiceData.invoiceAmount}K
-                </TableCell>
-                <TableCell
-                  id={`dueDate-${invoiceData._id}`}
-                  sx={{
-                    padding: "0px 0px 0px 16px",
-                    color: "whitesmoke",
-                    border: "0px",
-                  }}
-                  align="right"
-                >
-                  {invoiceData.dueDate}
-                </TableCell>
-                <TableCell
-                  id={`predictedPaymentDate-${invoiceData._id}`}
-                  sx={{
-                    padding: "0px 0px 0px 16px",
-                    color: "whitesmoke",
-                    border: "0px",
-                  }}
-                  align="center"
-                >
-                  --
-                </TableCell>
-                <TableCell
-                  id={`predictedAgingBucket${invoiceData._id}`}
-                  sx={{
-                    padding: "0px 0px 0px 16px",
-                    color: "whitesmoke",
-                    border: "0px",
-                  }}
-                  align="center"
-                >
-                  --
-                </TableCell>
-                <TableCell
-                  id={`notes-${invoiceData._id}`}
-                  sx={{
-                    padding: "0px 20px 0px 16px",
-                    color: "whitesmoke",
-                    border: "0px",
-                  }}
-                >
-                  {invoiceData.notes}
-                </TableCell>
-              </TableRow>
-            ))}
-        </TableBody>
-      </Table>
+    <Grid2
+      container
+      size={12}
+      height={"95%"}
+      width={"100%"}
+      flexDirection={"row"}
+      justifyContent={"center"}
+      alignItems={"center"}
+    >
+      <TableContainer
+        sx={{
+          height: "95%",
+          "& .MuiTableCell-root": {
+            color: "whitesmoke",
+            border: "0px",
+            padding: "0.5rem",
+          },
+        }}
+      >
+        <Table aria-label="simple table">
+          <TableHead>
+            <TableRow>
+              <TableCell>
+                <Checkbox
+                  onClick={toCheckeAll}
+                  checked={idArr.length === 10 ? true : false}
+                  sx={{ color: "whitesmoke" }}
+                />
+              </TableCell>
+              <TableCell>Customer Name</TableCell>
+              <TableCell>Customer No.</TableCell>
+              <TableCell>Invoice No.</TableCell>
+              <TableCell>Invoice Amount</TableCell>
+              <TableCell>Due Date</TableCell>
+              <TableCell>Predicted Payment Date</TableCell>
+              <TableCell>Predicted Aging Bucket</TableCell>
+              <TableCell>Notes</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody
+            sx={{
+              "& tr:nth-of-type(even)": {
+                backgroundColor: "#1e6cacff",
+              },
+              "& tr:nth-of-type(odd)": {
+                backgroundColor: "#3A5061",
+              },
+            }}
+          >
+            {invoiceDatas &&
+              invoiceDatas.map((invoiceData: InvoiceData) => (
+                <TableRow key={invoiceData._id}>
+                  <TableCell scope="row">
+                    <Checkbox
+                      checked={idArr.includes(invoiceData._id) ? true : false}
+                      // checked={allCheck}
+                      id={invoiceData._id}
+                      className="rowCheckBox"
+                      onClick={isAllChecked}
+                      sx={{ color: "whitesmoke", border: "0px" }}
+                    />
+                  </TableCell>
+                  <TableCell id={`customerName-${invoiceData._id}`}>
+                    {invoiceData.customerName}
+                  </TableCell>
+                  <TableCell id={`customerNo-${invoiceData._id}`}>
+                    {invoiceData.customerNo}
+                  </TableCell>
+                  <TableCell id={`invoiceNo-${invoiceData._id}`}>{invoiceData.invoiceNo}</TableCell>
+                  <TableCell id={`invoiceAmount-${invoiceData._id}`} align="right">
+                    {invoiceData.invoiceAmount}K
+                  </TableCell>
+                  <TableCell id={`dueDate-${invoiceData._id}`} align="right">
+                    {new Date(invoiceData.dueDate).toLocaleDateString("en-IN", {
+                      year: "numeric",
+                      month: "short",
+                      day: "numeric",
+                    })}
+                  </TableCell>
+                  <TableCell id={`predictedPaymentDate-${invoiceData._id}`} align="center">
+                    --
+                  </TableCell>
+                  <TableCell id={`predictedAgingBucket${invoiceData._id}`} align="center">
+                    --
+                  </TableCell>
+                  <TableCell id={`notes-${invoiceData._id}`}>{invoiceData.notes}</TableCell>
+                </TableRow>
+              ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
       <Pagination
-        color="primary"
         count={10}
         page={page}
+        size="medium"
+        color="primary"
         onChange={handleChange}
+        sx={{
+          "& .MuiPaginationItem-root": {
+            mx: { md: "1rem" },
+            color: "#ECEFF1", // default text color
+            border: "1px solid #607D8B", // subtle border
+            backgroundColor: "transparent",
+          },
+          "& .MuiPaginationItem-root:hover": {
+            backgroundColor: "#37474F",
+          },
+          "& .Mui-selected": {
+            backgroundColor: "#90CAF9",
+            color: "#1A1A1A",
+            fontWeight: "bold",
+            border: "none",
+            "&:hover": {
+              backgroundColor: "#64B5F6",
+            },
+          },
+          "& .MuiPaginationItem-ellipsis": {
+            color: "#B0BEC5",
+          },
+        }}
       />
-    </>
+    </Grid2>
   );
 }
