@@ -12,22 +12,20 @@ import {
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { setIdArr } from "@/redux/reducers/idArrSlice";
+import { setIdArr } from "@/redux/reducers/invoiceSlice";
 import type { RootState } from "@/redux/store";
-import { setInvoiceDatas } from "@/redux/reducers/invoiceDataSlice";
+import { setInvoiceDatas } from "@/redux/reducers/invoiceSlice";
 import Pagination from "@mui/material/Pagination";
-import { InvoiceData } from "@/util/types";
+import { InvoiceDataI } from "@/util/types";
 
 export default function MainTable(): React.ReactElement {
-  const invoiceDatas = useSelector((state: RootState) => state.invoiceDataStore.invoiceDatas);
-  const modalValue = useSelector((state: RootState) => state.modalStore.modalValue);
-  const addEditModal = useSelector((state: RootState) => state.modalStore.addEditModal);
-  const deleteModal = useSelector((state: RootState) => state.modalStore.deleteModal);
-  const correspondenceModal = useSelector(
-    (state: RootState) => state.modalStore.correspondenceModal,
-  );
-  const uploadModal = useSelector((state: RootState) => state.modalStore.uploadModal);
-  const idArr = useSelector((state: RootState) => state.idArrStore.idArr);
+  const invoiceDatas = useSelector((state: RootState) => state.invoice.invoiceDatas);
+  const modalValue = useSelector((state: RootState) => state.invoice.modalValue);
+  const addEditModal = useSelector((state: RootState) => state.invoice.addEditModal);
+  const deleteModal = useSelector((state: RootState) => state.invoice.deleteModal);
+  const correspondenceModal = useSelector((state: RootState) => state.invoice.correspondenceModal);
+  const uploadModal = useSelector((state: RootState) => state.invoice.uploadModal);
+  const idArr = useSelector((state: RootState) => state.invoice.idArr);
   const dispatch = useDispatch();
 
   const [allChecked, setAllChecked] = useState(false);
@@ -160,7 +158,7 @@ export default function MainTable(): React.ReactElement {
             }}
           >
             {invoiceDatas &&
-              invoiceDatas.map((invoiceData: InvoiceData) => (
+              invoiceDatas.map((invoiceData: InvoiceDataI) => (
                 <TableRow key={invoiceData._id}>
                   <TableCell scope="row">
                     <Checkbox

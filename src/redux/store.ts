@@ -1,18 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
-import modalSlice from "./reducers/modalSlice";
-import idArrSlice from "./reducers/idArrSlice";
-import invoiceDataSlice from "./reducers/invoiceDataSlice";
-import snackBarSlice from "./reducers/snackBarSlice";
+import invoiceDataSlice from "./reducers/invoiceSlice";
 import { createLogger } from "redux-logger";
 
 const logger = createLogger();
 
 export const store = configureStore({
   reducer: {
-    modalStore: modalSlice,
-    idArrStore: idArrSlice,
-    invoiceDataStore: invoiceDataSlice,
-    snackBarStore: snackBarSlice,
+    invoice: invoiceDataSlice,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
 });

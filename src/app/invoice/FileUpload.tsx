@@ -5,7 +5,7 @@ import type { RootState } from "@/redux/store";
 import { useSelector, useDispatch } from "react-redux";
 import { Input, Typography } from "@mui/material";
 import Grid from "@mui/material/Grid2";
-import { openUploadModal } from "@/redux/reducers/modalSlice";
+import { openUploadModal } from "@/redux/reducers/invoiceSlice";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 import BaseModal from "@/components/BaseModal";
 
@@ -13,7 +13,7 @@ export default function FileUpload(): React.ReactElement {
   const [file, setFile] = useState({ name: "" });
 
   const dispatch = useDispatch();
-  const uploadModal = useSelector((state: RootState) => state.modalStore.uploadModal);
+  const uploadModal = useSelector((state: RootState) => state.invoice.uploadModal);
   const handleClose = (): void => {
     dispatch(openUploadModal(false));
   };

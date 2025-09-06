@@ -8,15 +8,15 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
-import { openAddEditModal, setModalValue } from "@/redux/reducers/modalSlice";
+import { openAddEditModal, setModalValue } from "@/redux/reducers/invoiceSlice";
 import BaseModal from "@/components/BaseModal";
 import TextInputField, { inputTheme } from "@/components/TextInputField";
 
 export default function AddEditModal(): React.ReactElement {
   const dispatch = useDispatch();
-  const modalValue = useSelector((state: RootState) => state.modalStore.modalValue);
-  const addEditModal = useSelector((state: RootState) => state.modalStore.addEditModal);
-  const idArr = useSelector((state: RootState) => state.idArrStore.idArr);
+  const modalValue = useSelector((state: RootState) => state.invoice.modalValue);
+  const addEditModal = useSelector((state: RootState) => state.invoice.addEditModal);
+  const idArr = useSelector((state: RootState) => state.invoice.idArr);
 
   const [addEditFormData, setAddEditFormData] = useState({
     customerName: "",

@@ -3,24 +3,20 @@
 import React, { useEffect, useState } from "react";
 import { RootState } from "@/redux/store";
 import { useSelector, useDispatch } from "react-redux";
-import { InvoiceData } from "@/util/types";
+import { InvoiceDataI } from "@/util/types";
 import { Table, TableBody, TableCell, TableHead, TableRow, Typography } from "@mui/material";
-import { openCorrespondenceModal } from "@/redux/reducers/modalSlice";
+import { openCorrespondenceModal } from "@/redux/reducers/invoiceSlice";
 import BaseModal from "@/components/BaseModal";
 
 export default function Correspondence(): React.ReactElement {
   const dispatch = useDispatch();
-  const modalValue = useSelector((state: RootState) => state.modalStore.modalValue);
-  const correspondenceModal = useSelector(
-    (state: RootState) => state.modalStore.correspondenceModal,
-  );
-  const idArr = useSelector((state: RootState) => state.idArrStore.idArr);
+  const modalValue = useSelector((state: RootState) => state.invoice.modalValue);
+  const correspondenceModal = useSelector((state: RootState) => state.invoice.correspondenceModal);
+  const idArr = useSelector((state: RootState) => state.invoice.idArr);
 
-  const invoiceDatas = useSelector(
-    (state: RootState) => state.invoiceDataStore.invoiceDatas as InvoiceData[],
-  );
+  const invoiceDatas = useSelector((state: RootState) => state.invoice.invoiceDatas);
 
-  const [selectedInvoice, setSelectedInvoice] = useState<InvoiceData>({
+  const [selectedInvoice, setSelectedInvoice] = useState<InvoiceDataI>({
     _id: "",
     customerName: "",
     customerNo: "",
@@ -32,7 +28,7 @@ export default function Correspondence(): React.ReactElement {
   });
 
   useEffect(() => {
-    const selectedData = invoiceDatas?.find((invoice) => invoice._id === idArr[0]);
+    const selectedData = invoiceDatas?.find((invoice: InvoiceDataI) => invoice._id === idArr[0]);
     if (selectedData) {
       setSelectedInvoice(selectedData);
     }

@@ -12,13 +12,13 @@ import {
   openAddEditModal,
   openDeleteModal,
   openCorrespondenceModal,
-} from "@/redux/reducers/modalSlice";
+} from "@/redux/reducers/invoiceSlice";
 import type { RootState } from "@/redux/store";
-import { setInvoiceDatas } from "@/redux/reducers/invoiceDataSlice";
+import { setInvoiceDatas } from "@/redux/reducers/invoiceSlice";
 import Grid from "@mui/material/Grid2";
 
 export default function Navbar(): React.ReactElement {
-  const idArr = useSelector((state: RootState) => state.idArrStore.idArr);
+  const idArr = useSelector((state: RootState) => state.invoice.idArr);
   const dispatch = useDispatch();
 
   const handleSearchChange = (value: string): void => {

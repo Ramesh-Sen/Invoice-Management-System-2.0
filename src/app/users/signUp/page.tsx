@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Grid from "@mui/material/Grid2";
 import { useRouter } from "next/navigation";
-import { setCommonError, setCommonSuccess } from "@/redux/reducers/snackBarSlice";
+import { setCommonError, setCommonSuccess } from "@/redux/reducers/invoiceSlice";
 import { useDispatch } from "react-redux";
 import PrimaryBtn from "@/components/PrimaryBtn";
 import SecondaryBtn from "@/components/SecondaryBtn";

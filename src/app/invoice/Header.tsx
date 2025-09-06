@@ -11,9 +11,9 @@ import MenuItem from "@mui/material/MenuItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import Logout from "@mui/icons-material/Logout";
 import Settings from "@mui/icons-material/Settings";
-import { openUploadModal } from "@/redux/reducers/modalSlice";
+import { openUploadModal } from "@/redux/reducers/invoiceSlice";
 import { useDispatch } from "react-redux";
-import { setInvoiceDatas } from "@/redux/reducers/invoiceDataSlice";
+import { setInvoiceDatas } from "@/redux/reducers/invoiceSlice";
 import { useRouter } from "next/navigation";
 import Grid from "@mui/material/Grid2";
 

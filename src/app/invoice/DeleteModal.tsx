@@ -4,13 +4,13 @@ import React from "react";
 import type { RootState } from "@/redux/store";
 import { useSelector, useDispatch } from "react-redux";
 import { Typography } from "@mui/material";
-import { openDeleteModal } from "@/redux/reducers/modalSlice";
+import { openDeleteModal } from "@/redux/reducers/invoiceSlice";
 import BaseModal from "@/components/BaseModal";
 
 export default function DeleteModal(): React.ReactElement {
   const dispatch = useDispatch();
-  const deleteModal = useSelector((state: RootState) => state.modalStore.deleteModal);
-  const idArr = useSelector((state: RootState) => state.idArrStore.idArr);
+  const deleteModal = useSelector((state: RootState) => state.invoice.deleteModal);
+  const idArr = useSelector((state: RootState) => state.invoice.idArr);
 
   const handleClose = (): void => {
     dispatch(openDeleteModal(false));

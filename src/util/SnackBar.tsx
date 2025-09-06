@@ -3,11 +3,11 @@
 import React from "react";
 import { RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
-import { setSnackBarData } from "@/redux/reducers/snackBarSlice";
+import { setSnackBarData } from "@/redux/reducers/invoiceSlice";
 import { Alert, Snackbar, SnackbarCloseReason } from "@mui/material";
 
 export default function SnackBar(): React.ReactElement {
-  const snackBarData = useSelector((state: RootState) => state.snackBarStore.snackBarData);
+  const snackBarData = useSelector((state: RootState) => state.invoice.snackBarData);
 
   const dispatch = useDispatch();
 
