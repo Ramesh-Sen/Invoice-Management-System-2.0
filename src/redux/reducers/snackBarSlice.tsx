@@ -25,8 +25,22 @@ export const snackBarSlice = createSlice({
     setSnackBarData: (state, action: PayloadAction<SnackBarData>) => {
       state.snackBarData = action.payload;
     },
+    setCommonSuccess: (state, action: PayloadAction<string>) => {
+      state.snackBarData = {
+        open: true,
+        severity: "success",
+        message: action.payload,
+      };
+    },
+    setCommonError: (state, action: PayloadAction<string>) => {
+      state.snackBarData = {
+        open: true,
+        severity: "error",
+        message: action.payload,
+      };
+    },
   },
 });
 
-export const { setSnackBarData } = snackBarSlice.actions;
+export const { setSnackBarData, setCommonSuccess, setCommonError } = snackBarSlice.actions;
 export default snackBarSlice.reducer;

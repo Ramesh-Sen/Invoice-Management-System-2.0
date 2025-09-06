@@ -2,7 +2,8 @@
 
 import { usePathname } from "next/navigation";
 import Grid from "@mui/material/Grid2";
-import { Divider, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
+import StyledDivider from "@/components/StyledDivider";
 
 export default function RootLayout({
   children,
@@ -12,34 +13,22 @@ export default function RootLayout({
   const path = usePathname();
 
   return (
-    <Grid
-      container
-      height={"100%"}
-      width={"100%"}
-      justifyContent={"center"}
-      alignItems={"center"}
-      p={2}
-    >
+    <Grid container height={"100%"} width={"100%"} justifyContent={"center"} alignItems={"center"}>
       <Grid
         container
+        flexDirection={"column"}
         width="31rem"
         bgcolor="#2D424E"
         border={1}
         borderColor="#000"
         borderRadius="0.5rem"
-        p={3}
       >
-        <Typography variant="h4" color="whitesmoke">
+        <Typography variant="h4" color="whitesmoke" p={2}>
           {path.includes("login") ? "Login" : "Sign Up"}
         </Typography>
-        <Divider
-          variant="fullWidth"
-          color="black"
-          sx={{
-            width: "100%",
-            my: "1.2rem",
-          }}
-        />
+
+        <StyledDivider />
+
         {children}
       </Grid>
     </Grid>

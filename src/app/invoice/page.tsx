@@ -1,10 +1,10 @@
 import Grid from "@mui/material/Grid2";
-import AddEditModal from "./components/AddEditModal";
-import Correspondence from "./components/Correspondence";
-import DeleteModal from "./components/DeleteModal";
-import FileUpload from "./components/FileUpload";
-import Header from "./components/Header";
-import Main from "./components/Main";
+import AddEditModal from "./AddEditModal";
+import Correspondence from "./Correspondence";
+import DeleteModal from "./DeleteModal";
+import FileUpload from "./FileUpload";
+import Header from "./Header";
+import Main from "./Main";
 
 export default function Invoice(): React.ReactElement {
   return (
