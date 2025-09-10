@@ -1,5 +1,6 @@
 "use client";
 
+import React, { useEffect, useState } from "react";
 import {
   Checkbox,
   Grid2,
@@ -10,12 +11,10 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { setIdArr } from "@/redux/reducers/invoiceSlice";
 import type { RootState } from "@/redux/store";
-import { setInvoiceDatas } from "@/redux/reducers/invoiceSlice";
 import Pagination from "@mui/material/Pagination";
+import { setCommonError, setIdArr, setInvoiceDatas } from "@/redux/reducers/invoiceSlice";
 import { InvoiceDataI } from "@/util/types";
 
 export default function MainTable(): React.ReactElement {
@@ -24,7 +23,6 @@ export default function MainTable(): React.ReactElement {
   const addEditModal = useSelector((state: RootState) => state.invoice.addEditModal);
   const deleteModal = useSelector((state: RootState) => state.invoice.deleteModal);
   const correspondenceModal = useSelector((state: RootState) => state.invoice.correspondenceModal);
-  const uploadModal = useSelector((state: RootState) => state.invoice.uploadModal);
   const idArr = useSelector((state: RootState) => state.invoice.idArr);
   const dispatch = useDispatch();
 
@@ -81,6 +79,18 @@ export default function MainTable(): React.ReactElement {
   const [page, setPage] = React.useState(1);
 
   useEffect(() => {
+    fetch(`/api/invoice/?page=${page}&limt=${10}`)
+      .then((res) => res.json())
+      .then((result) => {
+        dispatch(setInvoiceDatas(result.data));
+      })
+      .catch((err) => {
+        console.log(err);
+        dispatch(setCommonError(err?.message || err?.error || "Something Went Wrong"));
+      });
+  }, [page]);
+
+  useEffect(() => {
     if (modalValue == "edit" && !addEditModal) {
       console.log(2, "edit");
       dispatch(setIdArr([]));
@@ -91,17 +101,7 @@ export default function MainTable(): React.ReactElement {
       console.log("correspondence");
       dispatch(setIdArr([]));
     }
-    fetch(`/api/invoice/?page=${page}&limt=${10}`)
-      .then((res) => res.json())
-      .then((result) => {
-        console.log(result);
-        dispatch(setInvoiceDatas(result.data));
-        // setLoading(false);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, [dispatch, addEditModal, deleteModal, modalValue, correspondenceModal, uploadModal, page]);
+  }, [addEditModal, deleteModal, modalValue, correspondenceModal]);
 
   const handleChange = (event: React.ChangeEvent<unknown>, value: number): void => {
     setPage(value);
@@ -157,45 +157,42 @@ export default function MainTable(): React.ReactElement {
               },
             }}
           >
-            {invoiceDatas &&
-              invoiceDatas.map((invoiceData: InvoiceDataI) => (
-                <TableRow key={invoiceData._id}>
-                  <TableCell scope="row">
-                    <Checkbox
-                      checked={idArr.includes(invoiceData._id) ? true : false}
-                      // checked={allCheck}
-                      id={invoiceData._id}
-                      className="rowCheckBox"
-                      onClick={isAllChecked}
-                      sx={{ color: "whitesmoke", border: "0px" }}
-                    />
-                  </TableCell>
-                  <TableCell id={`customerName-${invoiceData._id}`}>
-                    {invoiceData.customerName}
-                  </TableCell>
-                  <TableCell id={`customerNo-${invoiceData._id}`}>
-                    {invoiceData.customerNo}
-                  </TableCell>
-                  <TableCell id={`invoiceNo-${invoiceData._id}`}>{invoiceData.invoiceNo}</TableCell>
-                  <TableCell id={`invoiceAmount-${invoiceData._id}`} align="right">
-                    {invoiceData.invoiceAmount}K
-                  </TableCell>
-                  <TableCell id={`dueDate-${invoiceData._id}`} align="right">
-                    {new Date(invoiceData.dueDate).toLocaleDateString("en-IN", {
-                      year: "numeric",
-                      month: "short",
-                      day: "numeric",
-                    })}
-                  </TableCell>
-                  <TableCell id={`predictedPaymentDate-${invoiceData._id}`} align="center">
-                    --
-                  </TableCell>
-                  <TableCell id={`predictedAgingBucket${invoiceData._id}`} align="center">
-                    --
-                  </TableCell>
-                  <TableCell id={`notes-${invoiceData._id}`}>{invoiceData.notes}</TableCell>
-                </TableRow>
-              ))}
+            {invoiceDatas?.map((invoiceData: InvoiceDataI) => (
+              <TableRow key={invoiceData._id}>
+                <TableCell scope="row">
+                  <Checkbox
+                    checked={idArr.includes(invoiceData._id) ? true : false}
+                    // checked={allCheck}
+                    id={invoiceData._id}
+                    className="rowCheckBox"
+                    onClick={isAllChecked}
+                    sx={{ color: "whitesmoke", border: "0px" }}
+                  />
+                </TableCell>
+                <TableCell id={`customerName-${invoiceData._id}`}>
+                  {invoiceData.customerName}
+                </TableCell>
+                <TableCell id={`customerNo-${invoiceData._id}`}>{invoiceData.customerNo}</TableCell>
+                <TableCell id={`invoiceNo-${invoiceData._id}`}>{invoiceData.invoiceNo}</TableCell>
+                <TableCell id={`invoiceAmount-${invoiceData._id}`} align="right">
+                  {invoiceData.invoiceAmount}K
+                </TableCell>
+                <TableCell id={`dueDate-${invoiceData._id}`} align="right">
+                  {new Date(invoiceData.dueDate).toLocaleDateString("en-IN", {
+                    year: "numeric",
+                    month: "short",
+                    day: "numeric",
+                  })}
+                </TableCell>
+                <TableCell id={`predictedPaymentDate-${invoiceData._id}`} align="center">
+                  --
+                </TableCell>
+                <TableCell id={`predictedAgingBucket${invoiceData._id}`} align="center">
+                  --
+                </TableCell>
+                <TableCell id={`notes-${invoiceData._id}`}>{invoiceData.notes}</TableCell>
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
       </TableContainer>

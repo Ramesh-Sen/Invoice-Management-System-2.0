@@ -36,7 +36,7 @@ export const invoiceDataSlice = createSlice({
   name: "invoiceDataStore",
   initialState,
   reducers: {
-    setInvoiceDatas: (state, action: PayloadAction<[]>) => {
+    setInvoiceDatas: (state, action: PayloadAction<InvoiceDataI[]>) => {
       state.invoiceDatas = action.payload;
     },
     refreshInvoiceDatas: (state, action: PayloadAction<[]>) => {

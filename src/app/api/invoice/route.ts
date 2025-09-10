@@ -14,12 +14,16 @@ export async function GET(req: NextRequest) {
     const limit = Number(req.nextUrl.searchParams.get("limit")) || 10;
     const skip = (page - 1) * limit;
     console.log(search);
+
     if (search) {
       console.log("invoice 1");
-      const data = await Invoice.find({
-        owner: _id,
-        invoiceNo: { $regex: search, $options: "i" },
-      })
+      const data = await Invoice.find(
+        {
+          owner: _id,
+          invoiceNo: { $regex: search, $options: "i" },
+        },
+        { __v: 0, createdAt: 0, updatedAt: 0 },
+      )
         .skip(skip)
         .limit(limit)
         .exec();
@@ -28,7 +32,12 @@ export async function GET(req: NextRequest) {
     }
     console.log("invoice 2");
 
-    const data = await Invoice.find({ owner: _id }).skip(skip).limit(limit);
+    const data = await Invoice.find(
+      { owner: _id },
+      { __v: 0, createdAt: 0, updatedAt: 0, owner: 0 },
+    )
+      .skip(skip)
+      .limit(limit);
     const count = await Invoice.countDocuments();
     return NextResponse.json(
       { mssg: "Success", data: data, totalPages: Math.ceil(count / limit) },
@@ -53,7 +62,12 @@ export async function POST(req: NextRequest) {
       owner: _id,
     });
     const savedInvoice = await newInvoice.save();
-    return NextResponse.json({ message: "Success", data: savedInvoice }, { status: 200 });
+    const invoiceObj = savedInvoice.toObject();
+    delete invoiceObj.__v;
+    delete invoiceObj.createdAt;
+    delete invoiceObj.updatedAt;
+    delete invoiceObj.owner;
+    return NextResponse.json({ message: "Success", data: invoiceObj }, { status: 200 });
   } catch (err: any) {
     return NextResponse.json({ message: err.message }, { status: 500 });
   }
@@ -70,7 +84,12 @@ export async function PUT(req: NextRequest) {
       new: true,
     });
     console.log(2, savedInvoice);
-    return NextResponse.json({ message: "Success", data: savedInvoice }, { status: 200 });
+    const invoiceObj = savedInvoice.toObject();
+    delete invoiceObj.__v;
+    delete invoiceObj.createdAt;
+    delete invoiceObj.updatedAt;
+    delete invoiceObj.owner;
+    return NextResponse.json({ message: "Success", data: invoiceObj }, { status: 200 });
   } catch (err: any) {
     return NextResponse.json({ message: err.message }, { status: 500 });
   }

@@ -11,7 +11,7 @@ import MenuItem from "@mui/material/MenuItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import Logout from "@mui/icons-material/Logout";
 import Settings from "@mui/icons-material/Settings";
-import { openUploadModal } from "@/redux/reducers/invoiceSlice";
+import { openUploadModal, setCommonError } from "@/redux/reducers/invoiceSlice";
 import { useDispatch } from "react-redux";
 import { setInvoiceDatas } from "@/redux/reducers/invoiceSlice";
 import { useRouter } from "next/navigation";
@@ -42,6 +42,7 @@ export default function Header(): React.ReactElement {
       .catch((err) => {
         console.log(err);
         router.push("/users/login");
+        dispatch(setCommonError(err?.message || err?.error || "Something Went Wrong"));
       });
   };
 
@@ -56,6 +57,7 @@ export default function Header(): React.ReactElement {
       })
       .catch((err) => {
         console.log(err);
+        dispatch(setCommonError(err?.message || err?.error || "Something Went Wrong"));
       });
   }, []);
 

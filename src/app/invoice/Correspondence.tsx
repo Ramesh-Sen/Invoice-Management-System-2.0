@@ -10,7 +10,6 @@ import BaseModal from "@/components/BaseModal";
 
 export default function Correspondence(): React.ReactElement {
   const dispatch = useDispatch();
-  const modalValue = useSelector((state: RootState) => state.invoice.modalValue);
   const correspondenceModal = useSelector((state: RootState) => state.invoice.correspondenceModal);
   const idArr = useSelector((state: RootState) => state.invoice.idArr);
 
@@ -32,7 +31,7 @@ export default function Correspondence(): React.ReactElement {
     if (selectedData) {
       setSelectedInvoice(selectedData);
     }
-  }, [idArr, invoiceDatas, modalValue]);
+  }, [idArr, invoiceDatas]);
 
   const handleClose = (): void => {
     dispatch(openCorrespondenceModal(false));

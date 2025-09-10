@@ -8,51 +8,40 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
-import { openAddEditModal, setModalValue } from "@/redux/reducers/invoiceSlice";
+import {
+  openAddEditModal,
+  setCommonError,
+  setCommonSuccess,
+  setInvoiceDatas,
+  setModalValue,
+} from "@/redux/reducers/invoiceSlice";
 import BaseModal from "@/components/BaseModal";
 import TextInputField, { inputTheme } from "@/components/TextInputField";
 
+const CURRENT_DATE = dayjs().format("DD-MM-YYYY");
+const defaultAddEditFormData = {
+  customerName: "",
+  customerNo: "",
+  invoiceNo: "",
+  invoiceAmount: "",
+  dueDate: CURRENT_DATE,
+  notes: "",
+};
+
 export default function AddEditModal(): React.ReactElement {
   const dispatch = useDispatch();
+  const invoiceDatas = useSelector((state: RootState) => state.invoice.invoiceDatas);
   const modalValue = useSelector((state: RootState) => state.invoice.modalValue);
   const addEditModal = useSelector((state: RootState) => state.invoice.addEditModal);
   const idArr = useSelector((state: RootState) => state.invoice.idArr);
 
-  const [addEditFormData, setAddEditFormData] = useState({
-    customerName: "",
-    customerNo: "",
-    invoiceNo: "",
-    invoiceAmount: "",
-    dueDate: "",
-    notes: "",
-  });
+  const [addEditFormData, setAddEditFormData] = useState(defaultAddEditFormData);
 
-  useEffect(
-    () =>
-      setAddEditFormData(
-        modalValue === "add"
-          ? {
-              customerName: "",
-              customerNo: "",
-              invoiceNo: "",
-              invoiceAmount: "",
-              dueDate: "",
-              notes: "",
-            }
-          : {
-              customerName: document.getElementById(`customerName-${idArr[0]}`)
-                ?.innerText as string,
-              customerNo: document.getElementById(`customerNo-${idArr[0]}`)?.innerText as string,
-              invoiceNo: document.getElementById(`invoiceNo-${idArr[0]}`)?.innerText as string,
-              invoiceAmount: document
-                .getElementById(`invoiceAmount-${idArr[0]}`)
-                ?.innerText.slice(0, -1) as string,
-              dueDate: document.getElementById(`dueDate-${idArr[0]}`)?.innerText as string,
-              notes: document.getElementById(`notes-${idArr[0]}`)?.innerText as string,
-            },
-      ),
-    [idArr, modalValue],
-  );
+  useEffect(() => {
+    setAddEditFormData(
+      invoiceDatas?.find(({ _id }) => _id === idArr?.[0]) || defaultAddEditFormData,
+    );
+  }, [idArr]);
 
   const handleClose = (): void => {
     dispatch(openAddEditModal(false));
@@ -63,43 +52,39 @@ export default function AddEditModal(): React.ReactElement {
   };
 
   const handleSubmit = (): void => {
-    console.log("add", addEditFormData);
-
     fetch("/api/invoice", {
       method: modalValue === "add" ? "POST" : "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(
-        modalValue === "add" ? addEditFormData : { ...addEditFormData, _id: idArr[0] as string },
-      ),
+      body: JSON.stringify({
+        ...addEditFormData,
+        dueDate: dayjs(addEditFormData.dueDate, "DD-MM-YYYY").toDate(),
+      }),
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
+        const INDEX = invoiceDatas?.findIndex(({ _id }) => _id === idArr?.[0]);
+        const temp = [...invoiceDatas];
+        if (INDEX === -1) {
+          temp.push(data?.data);
+          dispatch(setCommonSuccess("Invoice Added Successfully"));
+        } else {
+          temp[INDEX] = data?.data;
+          dispatch(setCommonSuccess("Invoice Updated Successfully"));
+        }
+
+        dispatch(setInvoiceDatas(temp));
         handleClose();
-        setAddEditFormData({
-          customerName: "",
-          customerNo: "",
-          invoiceNo: "",
-          invoiceAmount: "",
-          dueDate: "",
-          notes: "",
-        });
+        setAddEditFormData(defaultAddEditFormData);
       })
       .catch((err) => {
         console.log(err);
+        dispatch(setCommonError(err?.message || err?.error || "Something Went Wrong"));
       });
     dispatch(setModalValue("reload"));
   };
 
   const handleReset = (): void => {
-    setAddEditFormData({
-      customerName: "",
-      customerNo: "",
-      invoiceNo: "",
-      invoiceAmount: "",
-      dueDate: "",
-      notes: "",
-    });
+    setAddEditFormData(defaultAddEditFormData);
   };
 
   return (
@@ -116,28 +101,28 @@ export default function AddEditModal(): React.ReactElement {
           <TextInputField
             id="customerName"
             label="Customer Name"
-            value={addEditFormData.customerName}
+            value={addEditFormData?.customerName}
             onChange={handleOnChange}
           />
 
           <TextInputField
             id="customerNo"
             label="Customer No."
-            value={addEditFormData.customerNo}
+            value={addEditFormData?.customerNo}
             onChange={handleOnChange}
           />
 
           <TextInputField
             id="invoiceNo"
             label="Invoice No."
-            value={addEditFormData.invoiceNo}
+            value={addEditFormData?.invoiceNo}
             onChange={handleOnChange}
           />
 
           <TextInputField
             id="invoiceAmount"
             label="Invoice Amount"
-            value={addEditFormData.invoiceAmount}
+            value={addEditFormData?.invoiceAmount}
             onChange={handleOnChange}
           />
         </Grid2>
@@ -146,7 +131,7 @@ export default function AddEditModal(): React.ReactElement {
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DatePicker
               label="Due Date"
-              value={dayjs(addEditFormData.dueDate || undefined)}
+              value={dayjs(addEditFormData?.dueDate || undefined, "DD-MM-YYYY")}
               onChange={(value) => {
                 setAddEditFormData({
                   ...addEditFormData,
@@ -174,7 +159,7 @@ export default function AddEditModal(): React.ReactElement {
             id="notes"
             label="Notes"
             fullWidth
-            value={addEditFormData.notes}
+            value={addEditFormData?.notes}
             onChange={handleOnChange}
             size="small"
             variant="outlined"

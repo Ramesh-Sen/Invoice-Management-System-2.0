@@ -4,11 +4,17 @@ import React from "react";
 import type { RootState } from "@/redux/store";
 import { useSelector, useDispatch } from "react-redux";
 import { Typography } from "@mui/material";
-import { openDeleteModal } from "@/redux/reducers/invoiceSlice";
+import {
+  openDeleteModal,
+  setCommonError,
+  setCommonSuccess,
+  setInvoiceDatas,
+} from "@/redux/reducers/invoiceSlice";
 import BaseModal from "@/components/BaseModal";
 
 export default function DeleteModal(): React.ReactElement {
   const dispatch = useDispatch();
+  const invoiceDatas = useSelector((state: RootState) => state.invoice.invoiceDatas);
   const deleteModal = useSelector((state: RootState) => state.invoice.deleteModal);
   const idArr = useSelector((state: RootState) => state.invoice.idArr);
 
@@ -26,11 +32,25 @@ export default function DeleteModal(): React.ReactElement {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
+        if (data?.data?.acknowledged) {
+          const temp = invoiceDatas?.filter(({ _id }) => !idArr?.includes(_id));
+          dispatch(setInvoiceDatas(temp));
+          dispatch(
+            setCommonSuccess(`${idArr.length === 1 ? "Invoice" : "Invoices"} deleted successfully`),
+          );
+        } else {
+          dispatch(
+            setCommonError(
+              `Could not able to delete ${idArr.length === 1 ? "Invoice" : "Invoices"}`,
+            ),
+          );
+        }
+
         handleClose();
       })
       .catch((err) => {
         console.log(err);
+        dispatch(setCommonError(err?.message || err?.error || "Something Went Wrong"));
       });
   };
 

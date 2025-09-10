@@ -3,7 +3,7 @@
   "extends": [
     "next/core-web-vitals",
     "eslint:recommended",
-    "plugin:@typescript-eslint/recommended"
+    "plugin:@typescript-eslint/recommended",
   ],
   "root": true,
   "rules": {
@@ -14,11 +14,12 @@
     "@typescript-eslint/explicit-module-boundary-types": "error",
     "@typescript-eslint/explicit-function-return-type": "error",
     "@typescript-eslint/prefer-as-const": "error",
+    "react-hooks/exhaustive-deps": "off",
     "no-restricted-imports": [
       "error",
       {
-        "patterns": ["@mui/*/*/*", "@emotion/react"]
-      }
-    ]
-  }
+        "patterns": ["@mui/*/*/*", "@emotion/react"],
+      },
+    ],
+  },
 }

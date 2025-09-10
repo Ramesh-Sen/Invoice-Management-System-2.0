@@ -12,6 +12,7 @@ import {
   openAddEditModal,
   openDeleteModal,
   openCorrespondenceModal,
+  setCommonError,
 } from "@/redux/reducers/invoiceSlice";
 import type { RootState } from "@/redux/store";
 import { setInvoiceDatas } from "@/redux/reducers/invoiceSlice";
@@ -32,8 +33,8 @@ export default function Navbar(): React.ReactElement {
       })
       .catch((err) => {
         console.log(err);
+        dispatch(setCommonError(err?.message || err?.error || "Something Went Wrong"));
       });
-    dispatch(setModalValue("reload"));
   };
 
   return (
@@ -95,8 +96,7 @@ export default function Navbar(): React.ReactElement {
           }}
           startIcon={<AddSharpIcon />}
           sx={{
-            // margin: "20px 4px 20px 20px",
-            backgroundColor: "#43A047", // vibrant, clear green
+            backgroundColor: "#43A047",
             color: "#fff",
             "&:hover": {
               backgroundColor: "#388E3C",
@@ -122,7 +122,6 @@ export default function Navbar(): React.ReactElement {
           }}
           startIcon={<EditSharpIcon />}
           sx={{
-            // margin: "20px 4px 20px 20px",
             backgroundColor: "#2196F3",
             color: "#fff",
             "&:hover": {
@@ -142,14 +141,12 @@ export default function Navbar(): React.ReactElement {
         </Button>
         <Button
           disabled={idArr.length === 0 ? true : false}
-          // className="m-5"
           variant="outlined"
           onClick={() => {
             (dispatch(openDeleteModal(true)), dispatch(setModalValue("delete")));
           }}
           startIcon={<RemoveSharpIcon />}
           sx={{
-            // margin: "20px 4px 20px 20px",
             backgroundColor: "#F44336",
             color: "#fff",
             "&:hover": {
@@ -181,29 +178,24 @@ export default function Navbar(): React.ReactElement {
             ),
           }}
           sx={{
-            // margin: "20px 4px 20px 20px",
-            // border: "2px solid gray",
-            // borderRadius: "4px",
-            // input: { color: "white" },
-
             input: {
-              color: "#FFFFFF", // Active text color
+              color: "#FFFFFF",
               "&::placeholder": {
                 color: "#B0BEC5",
                 opacity: 1,
               },
             },
-            backgroundColor: "#2F3E46", // Rich dark, not flat
+            backgroundColor: "#2F3E46",
             borderRadius: 1,
             "& .MuiOutlinedInput-root": {
               "& fieldset": {
-                borderColor: "#90CAF9", // Light blue border
+                borderColor: "#90CAF9",
               },
               "&:hover fieldset": {
-                borderColor: "#BBDEFB", // Hover brighter
+                borderColor: "#BBDEFB",
               },
               "&.Mui-focused fieldset": {
-                borderColor: "#29B6F6", // Vibrant focus
+                borderColor: "#29B6F6",
                 borderWidth: "2px",
               },
               "&.Mui-disabled": {

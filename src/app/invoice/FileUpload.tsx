@@ -5,7 +5,7 @@ import type { RootState } from "@/redux/store";
 import { useSelector, useDispatch } from "react-redux";
 import { Input, Typography } from "@mui/material";
 import Grid from "@mui/material/Grid2";
-import { openUploadModal } from "@/redux/reducers/invoiceSlice";
+import { openUploadModal, setCommonError } from "@/redux/reducers/invoiceSlice";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 import BaseModal from "@/components/BaseModal";
 
@@ -41,6 +41,7 @@ export default function FileUpload(): React.ReactElement {
       })
       .catch((err) => {
         console.log(err);
+        dispatch(setCommonError(err?.message || err?.error || "Something Went Wrong"));
       });
   };
 
