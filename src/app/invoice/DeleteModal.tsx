@@ -8,6 +8,7 @@ import {
   openDeleteModal,
   setCommonError,
   setCommonSuccess,
+  setIdArr,
   setInvoiceDatas,
 } from "@/redux/reducers/invoiceSlice";
 import BaseModal from "@/components/BaseModal";
@@ -19,6 +20,7 @@ export default function DeleteModal(): React.ReactElement {
   const idArr = useSelector((state: RootState) => state.invoice.idArr);
 
   const handleClose = (): void => {
+    dispatch(setIdArr([]));
     dispatch(openDeleteModal(false));
   };
 
@@ -45,13 +47,13 @@ export default function DeleteModal(): React.ReactElement {
             ),
           );
         }
-
-        handleClose();
       })
       .catch((err) => {
         console.log(err);
         dispatch(setCommonError(err?.message || err?.error || "Something Went Wrong"));
       });
+
+    handleClose();
   };
 
   return (

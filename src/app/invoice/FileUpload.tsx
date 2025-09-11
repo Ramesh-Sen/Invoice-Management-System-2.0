@@ -5,7 +5,7 @@ import type { RootState } from "@/redux/store";
 import { useSelector, useDispatch } from "react-redux";
 import { Input, Typography } from "@mui/material";
 import Grid from "@mui/material/Grid2";
-import { openUploadModal, setCommonError } from "@/redux/reducers/invoiceSlice";
+import { openUploadModal, setCommonError, setCommonSuccess } from "@/redux/reducers/invoiceSlice";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 import BaseModal from "@/components/BaseModal";
 
@@ -36,13 +36,17 @@ export default function FileUpload(): React.ReactElement {
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
-        handleClose();
-        // dispatch(refreshInvoiceDatas())
+        if (data?.error) {
+          dispatch(setCommonError(data?.error || "Something Went Wrong"));
+        }
+        dispatch(setCommonSuccess(data?.message));
       })
       .catch((err) => {
         console.log(err);
         dispatch(setCommonError(err?.message || err?.error || "Something Went Wrong"));
       });
+
+    handleClose();
   };
 
   const handleReset = (): void => {

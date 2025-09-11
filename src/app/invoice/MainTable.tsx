@@ -19,13 +19,11 @@ import { InvoiceDataI } from "@/util/types";
 
 export default function MainTable(): React.ReactElement {
   const invoiceDatas = useSelector((state: RootState) => state.invoice.invoiceDatas);
-  const modalValue = useSelector((state: RootState) => state.invoice.modalValue);
-  const addEditModal = useSelector((state: RootState) => state.invoice.addEditModal);
-  const deleteModal = useSelector((state: RootState) => state.invoice.deleteModal);
-  const correspondenceModal = useSelector((state: RootState) => state.invoice.correspondenceModal);
   const idArr = useSelector((state: RootState) => state.invoice.idArr);
   const dispatch = useDispatch();
 
+  const [page, setPage] = React.useState(1);
+  const [pageCount, setPageCount] = React.useState(1);
   const [allChecked, setAllChecked] = useState(false);
 
   const toCheckeAll = (): void => {
@@ -57,51 +55,18 @@ export default function MainTable(): React.ReactElement {
     return tempArr;
   };
 
-  // useEffect(() => {
-  //   console.log(1, "hello");
-
-  //   if (modalValue === "reload")
-  //     fetch(
-  //       "/api/invoice"
-  //     )
-  //       .then((res) => res.json())
-  //       .then((result) => {
-  //         console.log(result);
-  //         dispatch(setInvoiceDatas(result.data));
-  //         // setLoading(false);
-  //         // console.log(data);
-  //       })
-  //       .catch((err) => {
-  //         console.log(err);
-  //       });
-  // }, [dispatch, modalValue]);
-
-  const [page, setPage] = React.useState(1);
-
   useEffect(() => {
     fetch(`/api/invoice/?page=${page}&limt=${10}`)
       .then((res) => res.json())
       .then((result) => {
         dispatch(setInvoiceDatas(result.data));
+        setPageCount(result?.totalPages);
       })
       .catch((err) => {
         console.log(err);
         dispatch(setCommonError(err?.message || err?.error || "Something Went Wrong"));
       });
   }, [page]);
-
-  useEffect(() => {
-    if (modalValue == "edit" && !addEditModal) {
-      console.log(2, "edit");
-      dispatch(setIdArr([]));
-    } else if (modalValue == "delete" && !deleteModal) {
-      console.log(3, "delete");
-      dispatch(setIdArr([]));
-    } else if (modalValue == "correspondence" && !correspondenceModal) {
-      console.log("correspondence");
-      dispatch(setIdArr([]));
-    }
-  }, [addEditModal, deleteModal, modalValue, correspondenceModal]);
 
   const handleChange = (event: React.ChangeEvent<unknown>, value: number): void => {
     setPage(value);
@@ -197,7 +162,7 @@ export default function MainTable(): React.ReactElement {
         </Table>
       </TableContainer>
       <Pagination
-        count={10}
+        count={pageCount}
         page={page}
         size="medium"
         color="primary"

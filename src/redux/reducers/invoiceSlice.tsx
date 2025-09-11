@@ -9,7 +9,6 @@ export interface SnackBarDataI {
 export interface InvoiceSliceI {
   invoiceDatas: InvoiceDataI[];
   idArr: string[];
-  modalValue: string;
   addEditModal: boolean;
   deleteModal: boolean;
   correspondenceModal: boolean;
@@ -20,7 +19,6 @@ export interface InvoiceSliceI {
 const initialState: InvoiceSliceI = {
   invoiceDatas: [],
   idArr: [],
-  modalValue: "reload",
   addEditModal: false,
   deleteModal: false,
   correspondenceModal: false,
@@ -52,9 +50,6 @@ export const invoiceDataSlice = createSlice({
     },
     setIdArr: (state, action: PayloadAction<string[]>) => {
       state.idArr = action.payload;
-    },
-    setModalValue: (state, action: PayloadAction<string>) => {
-      state.modalValue = action.payload;
     },
     openAddEditModal: (state, action: PayloadAction<boolean>) => {
       state.addEditModal = action.payload;
@@ -92,7 +87,6 @@ export const {
   setInvoiceDatas,
   refreshInvoiceDatas,
   setIdArr,
-  setModalValue,
   openAddEditModal,
   openDeleteModal,
   openCorrespondenceModal,

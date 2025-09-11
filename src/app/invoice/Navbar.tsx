@@ -8,7 +8,6 @@ import SearchIcon from "@mui/icons-material/Search";
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
-  setModalValue,
   openAddEditModal,
   openDeleteModal,
   openCorrespondenceModal,
@@ -65,7 +64,6 @@ export default function Navbar(): React.ReactElement {
           disabled={idArr.length === 1 ? false : true}
           onClick={() => {
             dispatch(openCorrespondenceModal(true));
-            dispatch(setModalValue("correspondence"));
           }}
           sx={{
             backgroundColor: "#9C27B0",
@@ -92,7 +90,7 @@ export default function Navbar(): React.ReactElement {
           disabled={idArr.length === 0 ? false : true}
           variant="outlined"
           onClick={() => {
-            (dispatch(openAddEditModal(true)), dispatch(setModalValue("add")));
+            dispatch(openAddEditModal(true));
           }}
           startIcon={<AddSharpIcon />}
           sx={{
@@ -118,7 +116,7 @@ export default function Navbar(): React.ReactElement {
           disabled={idArr.length === 1 ? false : true}
           variant="outlined"
           onClick={() => {
-            (dispatch(openAddEditModal(true)), dispatch(setModalValue("edit")));
+            dispatch(openAddEditModal(true));
           }}
           startIcon={<EditSharpIcon />}
           sx={{
@@ -143,7 +141,7 @@ export default function Navbar(): React.ReactElement {
           disabled={idArr.length === 0 ? true : false}
           variant="outlined"
           onClick={() => {
-            (dispatch(openDeleteModal(true)), dispatch(setModalValue("delete")));
+            dispatch(openDeleteModal(true));
           }}
           startIcon={<RemoveSharpIcon />}
           sx={{

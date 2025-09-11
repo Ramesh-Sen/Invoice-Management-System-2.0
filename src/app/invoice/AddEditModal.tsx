@@ -12,13 +12,14 @@ import {
   openAddEditModal,
   setCommonError,
   setCommonSuccess,
+  setIdArr,
   setInvoiceDatas,
-  setModalValue,
 } from "@/redux/reducers/invoiceSlice";
 import BaseModal from "@/components/BaseModal";
 import TextInputField, { inputTheme } from "@/components/TextInputField";
+import { InvoiceDataI } from "@/util/types";
 
-const CURRENT_DATE = dayjs().format("DD-MM-YYYY");
+const CURRENT_DATE = dayjs().toISOString();
 const defaultAddEditFormData = {
   customerName: "",
   customerNo: "",
@@ -31,11 +32,11 @@ const defaultAddEditFormData = {
 export default function AddEditModal(): React.ReactElement {
   const dispatch = useDispatch();
   const invoiceDatas = useSelector((state: RootState) => state.invoice.invoiceDatas);
-  const modalValue = useSelector((state: RootState) => state.invoice.modalValue);
   const addEditModal = useSelector((state: RootState) => state.invoice.addEditModal);
   const idArr = useSelector((state: RootState) => state.invoice.idArr);
 
-  const [addEditFormData, setAddEditFormData] = useState(defaultAddEditFormData);
+  const [addEditFormData, setAddEditFormData] =
+    useState<Omit<InvoiceDataI, "_id">>(defaultAddEditFormData);
 
   useEffect(() => {
     setAddEditFormData(
@@ -44,6 +45,7 @@ export default function AddEditModal(): React.ReactElement {
   }, [idArr]);
 
   const handleClose = (): void => {
+    dispatch(setIdArr([]));
     dispatch(openAddEditModal(false));
   };
 
@@ -53,12 +55,9 @@ export default function AddEditModal(): React.ReactElement {
 
   const handleSubmit = (): void => {
     fetch("/api/invoice", {
-      method: modalValue === "add" ? "POST" : "PUT",
+      method: idArr.length ? "PUT" : "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        ...addEditFormData,
-        dueDate: dayjs(addEditFormData.dueDate, "DD-MM-YYYY").toDate(),
-      }),
+      body: JSON.stringify(addEditFormData),
     })
       .then((res) => res.json())
       .then((data) => {
@@ -73,14 +72,14 @@ export default function AddEditModal(): React.ReactElement {
         }
 
         dispatch(setInvoiceDatas(temp));
-        handleClose();
         setAddEditFormData(defaultAddEditFormData);
       })
       .catch((err) => {
         console.log(err);
         dispatch(setCommonError(err?.message || err?.error || "Something Went Wrong"));
       });
-    dispatch(setModalValue("reload"));
+
+    handleClose();
   };
 
   const handleReset = (): void => {
@@ -92,7 +91,7 @@ export default function AddEditModal(): React.ReactElement {
       isOpen={addEditModal}
       onClose={handleClose}
       title="Add Invoice"
-      primaryBtnLabel={modalValue === "add" ? "Add" : "Save"}
+      primaryBtnLabel={idArr.length ? "Save" : "Add"}
       handlePrimaryBtn={handleSubmit}
       handleSecondaryBtn={handleReset}
     >
@@ -131,11 +130,11 @@ export default function AddEditModal(): React.ReactElement {
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DatePicker
               label="Due Date"
-              value={dayjs(addEditFormData?.dueDate || undefined, "DD-MM-YYYY")}
+              value={dayjs(addEditFormData?.dueDate)}
               onChange={(value) => {
                 setAddEditFormData({
                   ...addEditFormData,
-                  dueDate: dayjs(value).format("DD-MM-YYYY"),
+                  dueDate: value?.format("YYYY-MM-DDTHH:mm:ssZ") || "",
                 });
               }}
               disablePast

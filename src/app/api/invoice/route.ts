@@ -6,7 +6,6 @@ const db = connect();
 
 export async function GET(req: NextRequest) {
   try {
-    console.log("Get Data");
     const _id = req.headers.get("x-user-id");
     console.log(_id);
     const search = req.nextUrl.searchParams.get("id");
@@ -16,7 +15,6 @@ export async function GET(req: NextRequest) {
     console.log(search);
 
     if (search) {
-      console.log("invoice 1");
       const data = await Invoice.find(
         {
           owner: _id,
@@ -27,10 +25,15 @@ export async function GET(req: NextRequest) {
         .skip(skip)
         .limit(limit)
         .exec();
-      const count = await Invoice.countDocuments();
-      return NextResponse.json({ mssg: "Success", data: data }, { status: 200 });
+      const count = await Invoice.countDocuments({
+        owner: _id,
+        invoiceNo: { $regex: search, $options: "i" },
+      });
+      return NextResponse.json(
+        { mssg: "Success", data: data, totalPages: Math.ceil(count / limit) },
+        { status: 200 },
+      );
     }
-    console.log("invoice 2");
 
     const data = await Invoice.find(
       { owner: _id },
@@ -38,7 +41,7 @@ export async function GET(req: NextRequest) {
     )
       .skip(skip)
       .limit(limit);
-    const count = await Invoice.countDocuments();
+    const count = await Invoice.countDocuments({ owner: _id });
     return NextResponse.json(
       { mssg: "Success", data: data, totalPages: Math.ceil(count / limit) },
       { status: 200 },
@@ -50,7 +53,6 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   try {
-    console.log("Added Data");
     const reqBody = await req.json();
     const _id = req.headers.get("x-user-id");
     console.log(_id);
@@ -75,7 +77,6 @@ export async function POST(req: NextRequest) {
 
 export async function PUT(req: NextRequest) {
   try {
-    console.log("Modify Data");
     const reqBody = await req.json();
     console.log(1, reqBody);
     // const newInvoice = new Invoice({...reqBody ,invoiceDate: new Date("<YYYY-mm-ddTHH:MM:ssZ>")});
@@ -97,7 +98,6 @@ export async function PUT(req: NextRequest) {
 
 export async function DELETE(req: NextRequest) {
   try {
-    console.log("Delete Data");
     const reqBody = await req.json();
     console.log(1, reqBody);
     const deleteInvoice = await Invoice.deleteMany({

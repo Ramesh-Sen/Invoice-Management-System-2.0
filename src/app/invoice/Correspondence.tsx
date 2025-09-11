@@ -27,7 +27,7 @@ export default function Correspondence(): React.ReactElement {
   });
 
   useEffect(() => {
-    const selectedData = invoiceDatas?.find((invoice: InvoiceDataI) => invoice._id === idArr[0]);
+    const selectedData = invoiceDatas?.find(({ _id }) => _id === idArr[0]);
     if (selectedData) {
       setSelectedInvoice(selectedData);
     }
@@ -117,13 +117,21 @@ export default function Correspondence(): React.ReactElement {
             }}
           >
             <TableCell>{selectedInvoice?.invoiceNo}</TableCell>
-            <TableCell>{selectedInvoice?.invoiceDate}</TableCell>
+            <TableCell>
+              {new Date(selectedInvoice?.dueDate).toLocaleDateString("en-IN", {
+                year: "numeric",
+                month: "short",
+                day: "numeric",
+              })}
+            </TableCell>
             <TableCell>{selectedInvoice?.invoiceAmount}</TableCell>
           </TableRow>
         </TableBody>
       </Table>
 
-      <Typography variant="h6">Total Amount to be Paid: $124.00K</Typography>
+      <Typography variant="h6">
+        Total Amount to be Paid: ${selectedInvoice?.invoiceAmount}K
+      </Typography>
       <Typography>
         In case you have already made a payment for the above items, please send us the details to
         ensure the payment is completed.
