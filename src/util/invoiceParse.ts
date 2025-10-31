@@ -22,7 +22,7 @@ export default async function invoiceParse(
       });
       invoiceData.save();
     });
-    return { message: "Data Added in Mongo Db go to /invoice to view" };
+    return { message: "File Uploaded Successfully" };
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (err: any) {
     return { err: err.message };

@@ -16,6 +16,7 @@ import type { RootState } from "@/redux/store";
 import Pagination from "@mui/material/Pagination";
 import { setCommonError, setIdArr, setInvoiceDatas } from "@/redux/reducers/invoiceSlice";
 import { InvoiceDataI } from "@/util/types";
+import { formatAmount, formatDate } from "@/util/formatUtil";
 
 export default function MainTable(): React.ReactElement {
   const invoiceDatas = useSelector((state: RootState) => state.invoice.invoiceDatas);
@@ -140,14 +141,10 @@ export default function MainTable(): React.ReactElement {
                 <TableCell id={`customerNo-${invoiceData._id}`}>{invoiceData.customerNo}</TableCell>
                 <TableCell id={`invoiceNo-${invoiceData._id}`}>{invoiceData.invoiceNo}</TableCell>
                 <TableCell id={`invoiceAmount-${invoiceData._id}`} align="right">
-                  {invoiceData.invoiceAmount}K
+                  {formatAmount(invoiceData.invoiceAmount)}
                 </TableCell>
                 <TableCell id={`dueDate-${invoiceData._id}`} align="right">
-                  {new Date(invoiceData.dueDate).toLocaleDateString("en-IN", {
-                    year: "numeric",
-                    month: "short",
-                    day: "numeric",
-                  })}
+                  {formatDate(invoiceData?.dueDate)}
                 </TableCell>
                 <TableCell id={`predictedPaymentDate-${invoiceData._id}`} align="center">
                   --

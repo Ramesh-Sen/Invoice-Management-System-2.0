@@ -22,7 +22,7 @@ export default async function verifyAccessToken(req: NextRequest): Promise<NextR
     return res;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (err: any) {
-    return NextResponse.json({ err: err.message || "Invalid access token" }, { status: 401 });
+    return NextResponse.json({ error: "Unauthorized", status: 401 }, { status: 401 });
   }
 }
 

@@ -5,8 +5,9 @@ import { RootState } from "@/redux/store";
 import { useSelector, useDispatch } from "react-redux";
 import { InvoiceDataI } from "@/util/types";
 import { Table, TableBody, TableCell, TableHead, TableRow, Typography } from "@mui/material";
-import { openCorrespondenceModal } from "@/redux/reducers/invoiceSlice";
+import { openCorrespondenceModal, setCommonError } from "@/redux/reducers/invoiceSlice";
 import BaseModal from "@/components/BaseModal";
+import { formatAmount, formatDate } from "@/util/formatUtil";
 
 export default function Correspondence(): React.ReactElement {
   const dispatch = useDispatch();
@@ -38,33 +39,28 @@ export default function Correspondence(): React.ReactElement {
   };
 
   const handleSubmit = (): void => {
-    console.log("add");
-    //   fetch(
-    //     `http://localhost:8080/invoice-management-system/${
-    //       modalValue === "add" ? "add-invoice" : "update-invoice"
-    //     }?id=${addEditFormData.invoiceNo}&name=${
-    //       addEditFormData.customerName
-    //     }&number=${addEditFormData.invoiceNo}&amount=${
-    //       addEditFormData.invoiceAmount
-    //     }&due=${addEditFormData.dueDate}&notes=${addEditFormData.notes}`
-    //   )
-    //     .then((res) => res.json())
-    //     .then((data) => {
-    //       console.log(data);
-    //       handleClose();
-    //       setAddEditFormData({
-    //         customerName: "",
-    //         customerNo: "",
-    //         invoiceNo: "",
-    //         invoiceAmount: "",
-    //         dueDate: "",
-    //         notes: "",
-    //       });
-    //     })
-    //     .catch((err) => {
-    //       console.log(err);
-    //     });
-    //   dispatch(setModalValue("reload"));
+    fetch("/api/invoice/download", {
+      method: "POST",
+      body: JSON.stringify(selectedInvoice),
+    })
+      .then((res) => (res.ok ? res.blob() : res.json()))
+      .then((res) => {
+        if (res?.error === "Unauthorized" && res?.status === 401) {
+          dispatch(setCommonError("User Session Expired. Please login again"));
+        } else {
+          console.log(res);
+          const url = window.URL.createObjectURL(res);
+          const link = document.createElement("a");
+          link.href = url;
+          link.download = `${selectedInvoice?.invoiceNo}.pdf`;
+          link.click();
+          link.remove();
+        }
+      })
+      .catch((err) => {
+        console.error("PDF download failed:", err);
+        dispatch(setCommonError("PDF download failed"));
+      });
   };
 
   return (
@@ -117,20 +113,14 @@ export default function Correspondence(): React.ReactElement {
             }}
           >
             <TableCell>{selectedInvoice?.invoiceNo}</TableCell>
-            <TableCell>
-              {new Date(selectedInvoice?.dueDate).toLocaleDateString("en-IN", {
-                year: "numeric",
-                month: "short",
-                day: "numeric",
-              })}
-            </TableCell>
-            <TableCell>{selectedInvoice?.invoiceAmount}</TableCell>
+            <TableCell>{formatDate(selectedInvoice?.dueDate)}</TableCell>
+            <TableCell>{formatAmount(selectedInvoice?.invoiceAmount)}</TableCell>
           </TableRow>
         </TableBody>
       </Table>
 
       <Typography variant="h6">
-        Total Amount to be Paid: ${selectedInvoice?.invoiceAmount}K
+        Total Amount to be Paid: {formatAmount(selectedInvoice?.invoiceAmount)}
       </Typography>
       <Typography>
         In case you have already made a payment for the above items, please send us the details to
